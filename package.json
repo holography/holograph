@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "hologram-github-theme": "^0.1.4",
+    "js-yaml": "^3.6.1",
+    "meta-marked": "^0.4.1",
+    "ncp": "^2.0.0",
+    "recursive-search": "^1.0.1",
+    "rimraf": "^2.5.2"
+  }
+}

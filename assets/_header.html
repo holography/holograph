@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>{{ title }}{{ #title }} &ndash; {{ /title }}{{ config.global_title }}</title>
+
+    <!-- Styleguide CSS -->
+    <link rel="stylesheet" href="styles/hgt-syntax.css">
+    <link rel="stylesheet" href="styles/hgt.css">
+
+    <!-- Source CSS -->
+    {{#config.css_include}}
+    <link rel="stylesheet" href="{{.}}">
+    {{/config.css_include}}
+</head>
+
+  <body class="hgt-body">
+    <div class="hgt-pagehead">
+      <div class="hgt-container">
+        <nav class="hgt-pagehead-nav" role="navigation">
+          <a href="index.html"
+             class="hgt-pagehead-nav-item <% if file_name.include?('index.html') %>selected<% end %>">
+            Home
+          </a>
+
+          {{#categories}}
+          <a href="{{ link }}" class="hgt-pagehead-nav-item">{{ title }}</a>
+          {{/categories}}
+        </nav>
+
+        <h1 class="hgt-pagehead-title">{{ config.global_title }}</h1>
+      </div>
+    </div>
+
+    <div class="hgt-styleguide hgt-container">
+      <div class="hgt-columns">
+          <div class="hgt-column one-fourth">
+            <nav class="hgt-menu">
+              {{#blocks}}
+              <a href="#{{name}}" class="hgt-menu-item">{{title}}</a>
+              {{/blocks}}
+            </nav>
+          </div>
+
+          <div class="hgt-column {{#blocks.length}}three-fourths{{/blocks.length}}">
+          <div class="hgt-content">

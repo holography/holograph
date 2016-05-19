@@ -1,0 +1,76 @@
+{
+  "_args": [
+    [
+      "hologram-github-theme",
+      "/Users/ben/Dev/hghack"
+    ]
+  ],
+  "_from": "hologram-github-theme@latest",
+  "_id": "hologram-github-theme@0.1.4",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/hologram-github-theme",
+  "_nodeVersion": "0.12.5",
+  "_npmUser": {
+    "email": "mathis@fsfe.org",
+    "name": "hupf"
+  },
+  "_npmVersion": "2.11.2",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "hologram-github-theme",
+    "raw": "hologram-github-theme",
+    "rawSpec": "",
+    "scope": null,
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/hologram-github-theme/-/hologram-github-theme-0.1.4.tgz",
+  "_shasum": "6c6d1926dbc7bced202d84babc10964ef795d138",
+  "_shrinkwrap": null,
+  "_spec": "hologram-github-theme",
+  "_where": "/Users/ben/Dev/hghack",
+  "author": {
+    "email": "hofer@puzzle.ch",
+    "name": "Mathis Hofer"
+  },
+  "bugs": {
+    "url": "https://github.com/wearecube/hologram-github-theme/issues"
+  },
+  "dependencies": {},
+  "description": "A Github Styleguide inspired theme for Hologram",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "6c6d1926dbc7bced202d84babc10964ef795d138",
+    "tarball": "https://registry.npmjs.org/hologram-github-theme/-/hologram-github-theme-0.1.4.tgz"
+  },
+  "gitHead": "e1d49c127f759899c1c5def11174d5a76d5ede52",
+  "homepage": "https://github.com/wearecube/hologram-github-theme#readme",
+  "keywords": [
+    "hologram",
+    "styleguide",
+    "theme"
+  ],
+  "license": "MIT",
+  "maintainers": [
+    {
+      "name": "hupf",
+      "email": "mathis@fsfe.org"
+    }
+  ],
+  "name": "hologram-github-theme",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wearecube/hologram-github-theme.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.1.4"
+}

@@ -1,0 +1,24 @@
+        </div>
+      </div>
+    </div>
+
+    <footer class="hgt-footer">
+      Built using <a href="https://github.com/trulia/hologram">Hologram</a> and <a href="https://github.com/wearecube/hologram-github-theme">Hologram Github Theme</a>
+    </footer>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+  <script src="scripts/vendor/jquery.waypoints.min.js"></script>
+  <script src="scripts/vendor/sticky.min.js"></script>
+  <script src="scripts/vendor/infinite.min.js"></script>
+  <script src="scripts/hgt.js"></script>
+
+  {{ #config.js_include }}
+  <script type="text/javascript" src="{{ . }}"></script>
+  {{ /config.js_include }}
+
+  {{ #config.components_include }}
+  <link rel="import" href="<%= component %>">
+  {{ /config.components_include }}
+</body>
+</html>
