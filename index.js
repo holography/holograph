@@ -10,42 +10,74 @@ var ncp = require('ncp').ncp;
 var mustache = require('mustache');
 var config = yaml.safeLoad(fs.readFileSync('hologram_config.yml', 'utf8'));
 
-marked.Renderer.prototype.code = function (code, lang) {
-    return this.options.highlight(code, lang);
+var Renderer = new marked.Renderer();
+
+Renderer.list = function(body, ordered) {
+    var type = ordered ? 'ol' : 'ul';
+    return '<' + type + ' class="styleguide">\n' + body + '</' + type + '>\n';
 };
 
-function escape(html, encode) {
-    return html
-        .replace(!encode ? /&(?!#?\w+;)/g : /&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-}
+Renderer.table = function(header, body) {
+      return '<table class="styleguide">\n'
+          + '<thead>\n'
+          + header
+          + '</thead>\n'
+          + '<tbody>\n'
+          + body
+          + '</tbody>\n'
+          + '</table>\n';
+};
+
+Renderer.blockquote = function(quote) {
+      return '<blockquote class="styleguide">\n' + quote + '</blockquote>\n';
+};
+
+Renderer.heading = function(text, level, raw) {
+      return '<h'
+          + level
+          + ' id="'
+          + this.options.headerPrefix
+          + raw.toLowerCase().replace(/[^\w]+/g, '-')
+          + '" class="styleguide">'
+          + text
+          + '</h'
+          + level
+          + '>\n';
+};
+
+Renderer.paragraph = function(text) {
+      return '<p class="styleguide">' + text + '</p>\n';
+};
+
+Renderer.codespan = function(text) {
+      return '<code class="styleguide">' + text + '</code>';
+};
+
+Renderer.code = function (code, lang) {
+    var hl = require('highlight.js');
+    var content = "";
+    lang = lang || "html";
+    if (lang === 'html_example') {
+        content = '<div class="codeExample"><div class="exampleOutput">' + 
+            code +
+            '</div><div class="codeBlock"><pre class="styleguide"><code>' +
+            hl.highlight('html', code).value +
+            '</pre></code></div></div>';
+    } else {
+        content = '<pre class="styleguide"><code>'+hl.highlight(lang, code).value+'</code></pre>';
+    }
+    return content;
+};
+
+marked.setOptions({ renderer: Renderer });
 
 function parseMarkdown(text) {
-    var hl = require('highlight.js');
-    return marked(text, {
-        highlight: function (code, lang) {
-            var content = "";
-            lang = lang || "html";
-            if (lang === 'html_example') {
-                content = '<div class="codeExample"><div class="exampleOutput">' + 
-                    code +
-                    '</div><div class="codeBlock"><pre><code>' +
-                    hl.highlight('html', code).value +
-                    '</pre></code></div></div>';
-            } else {
-                content = '<pre><code>'+hl.highlight(lang, code).value+'</code></pre>';
-            }
-            return content;
-        }
-    });
+    return marked(text);
 }
 
 function extractComment(file) {
     var doc = /\/\*doc\n([\s\S]*)\*\//m;
-    var comment = fs.readFileSync(file, 'utf8').match(doc)
+    var comment = fs.readFileSync(file, 'utf8').match(doc);
     return comment;
 }
 
