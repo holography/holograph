@@ -43,7 +43,8 @@ function parseMarkdown(text) {
 
 function extractComment(file) {
     var doc = /\/\*doc\n([\s\S]*)\*\//m;
-    return fs.readFileSync(file, 'utf8').match(doc)[1];
+    var comment = fs.readFileSync(file, 'utf8').match(doc)
+    return comment;
 }
 
 function setupBuildDir(dir, assets, cb) {
@@ -72,10 +73,12 @@ function prepareCategories(results) {
 
     results.forEach(function(file) {
         var text = extractComment(file);
-        var parsed = parseMarkdown(text);
+        if (text) {
+            var parsed = parseMarkdown(text[1]);
 
-        if (!(pages.hasOwnProperty(parsed.meta.category))) { pages[parsed.meta.category] = []; }
-        pages[parsed.meta.category].push(parsed);
+            if (!(pages.hasOwnProperty(parsed.meta.category))) { pages[parsed.meta.category] = []; }
+            pages[parsed.meta.category].push(parsed);
+        }
     });
 
     return pages;
@@ -105,7 +108,7 @@ function processFiles(results) {
     for (category in pages) {
         if (pages.hasOwnProperty(category)) {
             var blocks = [];
-            var rawContent = fs.readFileSync('assets/_header.html', 'utf8');
+            var rawContent = fs.readFileSync(config.documentation_assets+'/_header.html', 'utf8');
 
             pages[category].forEach(function (block) {
                 rawContent += '<h1 id="'+block.meta.name+'" class="styleguide">'+block.meta.title+'</h1>';
@@ -117,7 +120,7 @@ function processFiles(results) {
                 });
             });
 
-            rawContent += fs.readFileSync('assets/_footer.html', 'utf8');
+            rawContent += fs.readFileSync(config.documentation_assets +'/_footer.html', 'utf8');
 
             var content = mustache.render(
                 rawContent,
