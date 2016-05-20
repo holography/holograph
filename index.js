@@ -24,19 +24,21 @@ function escape(html, encode) {
 }
 
 function parseMarkdown(text) {
+    var hl = require('highlight.js');
     return marked(text, {
         highlight: function (code, lang) {
             var content = "";
+            lang = lang || "html";
             if (lang === 'html_example') {
                 content = '<div class="codeExample"><div class="exampleOutput">' + 
                     code +
-                    '</div><div class="codeBlock"><div class="highlight"><pre>' +
-                    escape(code, true) +
-                    '</pre></div></div></div>';
+                    '</div><div class="codeBlock"><pre><code>' +
+                    hl.highlight('html', code).value +
+                    '</pre></code></div></div>';
             } else {
-                content = '<pre><code>'+escape(code, true)+'</code></pre>';
+                content = '<pre><code>'+hl.highlight(lang, code).value+'</code></pre>';
             }
-            return content; // require('highlight.js').highlightAuto(content).value;
+            return content;
         }
     });
 }
