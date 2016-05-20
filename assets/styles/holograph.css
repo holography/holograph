@@ -10,8 +10,8 @@
 .hgt-pagehead-title {
     float: left;
 }
-.hgt-content > table th,
-.hgt-content > table td {
+table.styleguide th,
+table.styleguide td {
     text-align: left;
     padding: 0 2em 2em 0;
 }
@@ -47,18 +47,21 @@
         width: 100%;
     }
 
-    .hgt-content > table {
+    table.styleguide.styleguide {
         width: 100%;
+        margin-top: 2em;
     }
-    .hgt-content > table th {
+    table.styleguide thead {
         display: none;
     }
-    .hgt-content > table tr {
+    table.styleguide tr + tr {
         display: block;
         border-top: 1px solid #eee;
+        margin-top: 1em;
         padding-top: 2em;
     }
-    .hgt-content > table td {
+    table.styleguide td {
         display: block;
+        padding: 0 0 1em;
     }
 }
