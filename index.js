@@ -1,3 +1,6 @@
+'use strict';
+/*jslint node: true, stupid: true */
+
 var marked = require('meta-marked');
 var fs = require('fs');
 var yaml = require('js-yaml');
@@ -5,27 +8,35 @@ var search = require('recursive-search');
 var rmdir = require('rimraf');
 var ncp = require('ncp').ncp;
 var mustache = require('mustache');
+var config = yaml.safeLoad(fs.readFileSync('hologram_config.yml', 'utf8'));
 
-marked.Renderer.prototype.code = function(code, lang, escaped) {
+marked.Renderer.prototype.code = function (code, lang) {
     return this.options.highlight(code, lang);
-}
+};
 
 function escape(html, encode) {
-  return html
-    .replace(!encode ? /&(?!#?\w+;)/g : /&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+    return html
+        .replace(!encode ? /&(?!#?\w+;)/g : /&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
 
 function parseMarkdown(text) {
     return marked(text, {
-        highlight: function(code, lang) {
-            if (lang == 'html_example') {
-                return '<div class="codeExample"><div class="exampleOutput">'+code+'</div><div class="codeBlock"><div class="highlight"><pre>'+escape(code, true)+'</pre></div></div></div>'
+        highlight: function (code, lang) {
+            var content = "";
+            if (lang === 'html_example') {
+                content = '<div class="codeExample"><div class="exampleOutput">' + 
+                    code +
+                    '</div><div class="codeBlock"><div class="highlight"><pre>' +
+                    escape(code, true) +
+                    '</pre></div></div></div>';
+            } else {
+                content = '<pre><code>'+escape(code, true)+'</code></pre>';
             }
-            return '<pre><code>'+escape(code, true)+'</code></pre>';
+            return content; // require('highlight.js').highlightAuto(content).value;
         }
     });
 }
@@ -39,7 +50,7 @@ function setupBuildDir(dir, assets, cb) {
     rmdir(dir, function() {
         fs.mkdir(dir);
         ncp(assets, dir, function(err) {
-            if (err) throw err;
+            if (err) { throw err; }
             cb();
         });
     });
@@ -49,12 +60,12 @@ function copyDependencies(dir, deps, cb) {
     var path = require('path');
     var source = deps.shift();
     ncp(source, dir+'/'+path.basename(source), function(err) {
-        if (err) throw err;
-        deps.length ? copyDependencies(dir, deps, cb) : cb();
+        if (err) { throw err; }
+        if (deps.length) { copyDependencies(dir, deps, cb); }
+        cb();
     });
 }
 
-var config = yaml.safeLoad(fs.readFileSync('hologram_config.yml', 'utf8'));
 
 function prepareCategories(results) {
     var pages = {};
@@ -63,7 +74,7 @@ function prepareCategories(results) {
         var text = extractComment(file);
         var parsed = parseMarkdown(text);
 
-        if (!(parsed.meta.category in pages)) pages[parsed.meta.category] = [];
+        if (!(pages.hasOwnProperty(parsed.meta.category))) { pages[parsed.meta.category] = []; }
         pages[parsed.meta.category].push(parsed);
     });
 
@@ -72,12 +83,15 @@ function prepareCategories(results) {
 
 function preparePageLinks(pages) {
     var links = [];
+    var category;
 
     for (category in pages) {
-        links.push({
-            link: category + '.html',
-            title: category
-        });
+        if (pages.hasOwnProperty(category)) {
+            links.push({
+                link: category + '.html',
+                title: category
+            });
+        }
     }
 
     return links;
@@ -86,39 +100,42 @@ function preparePageLinks(pages) {
 function processFiles(results) {
     var pages = prepareCategories(results);
     var links = preparePageLinks(pages);
+    var category;
 
     for (category in pages) {
-        var blocks = [];
-        var rawContent = fs.readFileSync('assets/_header.html', 'utf8');
+        if (pages.hasOwnProperty(category)) {
+            var blocks = [];
+            var rawContent = fs.readFileSync('assets/_header.html', 'utf8');
 
-        pages[category].forEach(function (block) {
-            rawContent += '<h1 id="'+block.meta.name+'" class="styleguide">'+block.meta.title+'</h1>';
-            rawContent += block.html;
+            pages[category].forEach(function (block) {
+                rawContent += '<h1 id="'+block.meta.name+'" class="styleguide">'+block.meta.title+'</h1>';
+                rawContent += block.html;
 
-            blocks.push({
-                name: block.meta.name,
-                title: block.meta.title
+                blocks.push({
+                    name: block.meta.name,
+                    title: block.meta.title
+                });
             });
-        });
 
-        rawContent += fs.readFileSync('assets/_footer.html', 'utf8');
+            rawContent += fs.readFileSync('assets/_footer.html', 'utf8');
 
-        var content = mustache.render(
-            rawContent,
-            {
-                title: category,
-                config: config,
-                categories: pages,
-                blocks: blocks
-            }
-        );
+            var content = mustache.render(
+                rawContent,
+                {
+                    title: category,
+                    config: config,
+                    categories: links,
+                    blocks: blocks
+                }
+            );
 
-        fs.writeFile(config.destination + '/' + category + '.html', content);
-    };
+            fs.writeFile(config.destination + '/' + category + '.html', content);
+        }
+    }
 }
 
 function maybeThrowError(err) {
-    if (err) throw err;
+    if (err) { throw err; }
 }
 
 setupBuildDir(config.destination, config.documentation_assets, function() {

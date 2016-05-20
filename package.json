@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "highlight.js": "^9.4.0",
     "hologram-github-theme": "^0.1.4",
     "js-yaml": "^3.6.1",
     "meta-marked": "^0.4.1",
