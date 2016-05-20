@@ -8,6 +8,7 @@
     <!-- Styleguide CSS -->
     <link rel="stylesheet" href="styles/hgt.css">
     <link rel="stylesheet" href="styles/github-gist.css">
+    <link rel="stylesheet" href="styles/holograph.css">
 
     <!-- Source CSS -->
     {{#config.css_include}}
@@ -17,8 +18,9 @@
 
   <body class="hgt-body">
     <div class="hgt-pagehead">
-      <div class="hgt-container">
-        <nav class="hgt-pagehead-nav" role="navigation">
+      <div class="hgt-container clearfix">
+        <h1 class="hgt-pagehead-title">{{ config.global_title }}</h1>
+        <nav class="hgt-pagehead-nav clearfix" role="navigation">
           <a href="index.html"
              class="hgt-pagehead-nav-item <% if file_name.include?('index.html') %>selected<% end %>">
             Home
@@ -28,8 +30,6 @@
           <a href="{{ link }}" class="hgt-pagehead-nav-item">{{ title }}</a>
           {{/categories}}
         </nav>
-
-        <h1 class="hgt-pagehead-title">{{ config.global_title }}</h1>
       </div>
     </div>
 
