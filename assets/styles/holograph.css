@@ -113,3 +113,13 @@ table.styleguide td:last-child {
         padding: 0;
     }
 }
+
+/* ============================
+    other styles
+============================ */
+.hgt-content code.styleguide:before,
+.hgt-content code.styleguide:after,
+.hgt-content tt.styleguide:before,
+.hgt-content tt.styleguide:after {
+    content: '\00a0';
+}
