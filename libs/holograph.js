@@ -14,7 +14,7 @@ function extractComment(file) {
     return comment;
 }
 
-function extractPalette(file) {
+function extractPalette(file, config) {
     var source = fs.readFileSync(file, 'utf8');
     var template = fs.readFileSync(config.documentation_assets + '/_swatches.html', 'utf8');
 
@@ -71,7 +71,7 @@ function copyDependencies(dir, deps, cb) {
     });
 }
 
-function prepareCategories(results) {
+function prepareCategories(results, config) {
     var pages = {};
 
     results.forEach(function(file) {
@@ -82,7 +82,7 @@ function prepareCategories(results) {
             if (!(pages.hasOwnProperty(content.meta.category))) {
                 pages[content.meta.category] = [];
             }
-            content.html += extractPalette(file);
+            content.html += extractPalette(file, config);
             pages[content.meta.category].push(content);
         }
     });
@@ -113,7 +113,7 @@ function preparePageLinks(current, pages) {
 }
 
 function processFiles(results, config) {
-    var pages = prepareCategories(results);
+    var pages = prepareCategories(results, config);
     var category;
 
     for (category in pages) {
