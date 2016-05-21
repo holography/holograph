@@ -1,9 +1,10 @@
-# Holograph
+# Holograph (alpha)
 
 Holograph is a NPM module that parses comments in your CSS and turns them into a beautiful style guide. It is initially a port of the excellent work done by the [Hologram Ruby gem](https://trulia.github.io/hologram/) and aims to be compatible with most of its features.
 
-  - **Technology stack**: Node.js, CSS, HTML, JavaScript
-  - **Status**: alpha
+In addition to features found in Hologram, Holograph includes:
+* a responsive version of the [Hologram GitHub Template](https://github.com/wearecube/hologram-github-theme) with some minor alterations to content styles
+* support for displaying multiple [colour palettes](#colour-palettes)
 
 ## Installation
 
@@ -11,11 +12,17 @@ Holograph is a NPM module that parses comments in your CSS and turns them into a
 
 ## Usage
 
+### Documenting your styles
+
+Holograph will scan for stylesheets (`.css`, `.scss`, `.sass`, `.less`, `.styl`) within the source directory defined in your configuration. It will find holograph comments and generate style guide sections from your comment's settings and content.
+
+For more information and syntax, see [documenting your styles and components](https://github.com/trulia/hologram#documenting-your-styles-and-components) in the Hologram repo.
+
 ### Colour palettes
 
-Holograph allows creation of colour palettes from sources written in SCSS, SASS, LESS, or Stylus. This feature is not found in Ruby Hologram.
+Holograph allows creation of colour palettes from your proprocessor stylesheets (`.scss`, `.sass`, `.less`, `.styl`). This feature is new for Holograph and is not found in Ruby Hologram.
 
-The source file must contain a comment with the usual meta information (title, category, etc) required for Holograph. To mark colour variables to include in Holograph, use the following syntax:
+The source file must contain a comment with the usual meta information (`title`, `category`, etc) required for Holograph. To mark colour variables to include in Holograph, use the following syntax:
 
     $scss-variable: <value>;    // hg-palette: Palette name
     $sass-variable: <value>     // hg-palette: Palette name
@@ -36,6 +43,16 @@ The source file must contain a comment with the usual meta information (title, c
 ## How to test the software
 
 ## Known issues
+
+### Incomplete features
+
+* content and configuration for `index.html`
+* `parent` option
+* support for JavaScript content
+* [referencing other components](https://github.com/trulia/hologram#referencing-other-components)
+
+### Features not in scope
+* support for colour values in palettes that require compilation, such as `darken($brand-primary, 10%)` and nested colour variables.
 
 ## Getting help
 
