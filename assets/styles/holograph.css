@@ -69,8 +69,21 @@
 }
 .hgt-swatch {
     margin-bottom: 1em;
-    padding-bottom: 60%;
+    height: 6em;
     border: 1px solid #ccc;
+}
+
+@media screen and (max-width: 600px) {
+    .hgt-swatch {
+        display: inline-block;
+        height: 4em;
+        width: 25%;
+        margin: 0 1em 0 0;
+        vertical-align: middle;
+    }
+    .hgt-palette .hgt-column {
+        margin-top: 0;
+    }
 }
 
 /* ============================
