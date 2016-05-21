@@ -48,7 +48,7 @@
 }
 
 @media screen and (max-width: 600px) {
-    .hgt-column + .hgt-column {
+    .hgt--xs-fill + .hgt--xs-fill {
         margin-top: 2em;
     }
     .hgt-sticky {
@@ -56,6 +56,21 @@
         width: 100%;
         max-width: 100%;
     }
+}
+
+/* ============================
+    colour swatches
+============================ */
+.hgt-palette {
+    margin-bottom: 2em;
+}
+.hgt-palette .hgt-column {
+    margin-bottom: 1em;
+}
+.hgt-swatch {
+    margin-bottom: 1em;
+    padding-bottom: 60%;
+    border: 1px solid #ccc;
 }
 
 /* ============================
