@@ -1,19 +1,29 @@
+/* ============================
+    utilities
+============================ */
 .clearfix:after {
     content: '';
     display: table;
     clear: both;
 }
 
+@media screen and (max-width: 600px) {
+    .hgt--xs-fill.hgt--xs-fill {
+        width: 100%;
+    }
+}
+
+/* ============================
+    hgt responsive styles
+============================ */
 .hgt-container {
     max-width: 100%;
 }
 .hgt-pagehead-title {
     float: left;
 }
-table.styleguide th,
-table.styleguide td {
-    text-align: left;
-    padding: 0 2em 2em 0;
+.hgt-menu-item {
+    cursor: pointer;
 }
 
 @media screen and (max-width: 1000px) {
@@ -33,20 +43,31 @@ table.styleguide td {
         padding-left: 2em;
     }
     .hgt-sticky {
+        max-width: 22%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .hgt-column + .hgt-column {
+        margin-top: 2em;
+    }
+    .hgt-sticky {
         position: static;
         width: 100%;
         max-width: 100%;
     }
 }
 
-@media screen and (max-width: 600px) {
-    .hgt-container {
-        width: 100%;
-    }
-    .hgt-styleguide > .hgt-columns > .hgt-column {
-        width: 100%;
-    }
+/* ============================
+    table styles
+============================ */
+table.styleguide th,
+table.styleguide td {
+    text-align: left;
+    padding: 0 2em 2em 0;
+}
 
+@media screen and (max-width: 600px) {
     table.styleguide.styleguide {
         width: 100%;
         margin-top: 2em;
