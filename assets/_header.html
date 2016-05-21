@@ -33,9 +33,9 @@
       </div>
     </div>
 
-    <div class="hgt-styleguide hgt-container hgt--xs-fill">
+    <div class="hgt-styleguide hgt-container hgt-column--mobile">
       <div class="hgt-columns">
-          <div class="hgt-column one-fourth hgt--xs-fill">
+          <div class="hgt-column one-fourth hgt-column--mobile">
             <nav class="hgt-menu">
               {{#blocks}}
               <a href="#{{name}}" class="hgt-menu-item">{{title}}</a>
@@ -43,5 +43,5 @@
             </nav>
           </div>
 
-          <div class="hgt-column {{#blocks.length}}three-fourths hgt--xs-fill{{/blocks.length}}">
+          <div class="hgt-column {{#blocks.length}}three-fourths hgt-column--mobile{{/blocks.length}}">
           <div class="hgt-content">
