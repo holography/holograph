@@ -8,10 +8,6 @@ var ncp = require('ncp').ncp;
 var mustache = require('mustache');
 var marked = require('./markdown_renderer');
 
-function parseMarkdown(text) {
-    return marked(text);
-}
-
 function extractComment(file) {
     var doc = /\/\*doc\n([\s\S]*?)\*\//m;
     var comment = fs.readFileSync(file, 'utf8').match(doc);
@@ -45,7 +41,7 @@ function prepareCategories(results) {
     results.forEach(function(file) {
         var text = extractComment(file);
         if (text) {
-            var parsed = parseMarkdown(text[1]);
+            var parsed = marked(text[1]);
 
             if (!(pages.hasOwnProperty(parsed.meta.category))) { pages[parsed.meta.category] = []; }
             pages[parsed.meta.category].push(parsed);
@@ -55,15 +51,21 @@ function prepareCategories(results) {
     return pages;
 }
 
-function preparePageLinks(pages) {
-    var links = [];
+function preparePageLinks(current, pages) {
+    var links = [{
+        link: 'index.html',
+        title: 'Home',
+        selected: current === 'index' ? 'selected' : ''
+    }];
+    
     var category;
 
     for (category in pages) {
         if (pages.hasOwnProperty(category)) {
             links.push({
                 link: category + '.html',
-                title: category
+                title: category,
+                selected: category === current ? 'selected' : ''
             });
         }
     }
@@ -73,7 +75,6 @@ function preparePageLinks(pages) {
 
 function processFiles(results, config) {
     var pages = prepareCategories(results);
-    var links = preparePageLinks(pages);
     var category;
 
     for (category in pages) {
@@ -98,12 +99,26 @@ function processFiles(results, config) {
                 {
                     title: category,
                     config: config,
-                    categories: links,
+                    categories: preparePageLinks(category, pages),
                     blocks: blocks
                 }
             );
 
             fs.writeFile(config.destination + '/' + category + '.html', content);
+
+            if (category === config.index) {
+                content = mustache.render(
+                    rawContent,
+                    {
+                        title: 'index',
+                        config: config,
+                        categories: preparePageLinks('index', pages),
+                        blocks: blocks
+                    }
+                );
+                fs.writeFile(config.destination + '/index.html', content);
+            }
+
         }
     }
 }

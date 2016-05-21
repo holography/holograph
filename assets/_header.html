@@ -21,13 +21,8 @@
       <div class="hgt-container clearfix">
         <h1 class="hgt-pagehead-title">{{ config.global_title }}</h1>
         <nav class="hgt-pagehead-nav clearfix" role="navigation">
-          <a href="index.html"
-             class="hgt-pagehead-nav-item <% if file_name.include?('index.html') %>selected<% end %>">
-            Home
-          </a>
-
           {{#categories}}
-          <a href="{{ link }}" class="hgt-pagehead-nav-item">{{ title }}</a>
+          <a href="{{ link }}" class="hgt-pagehead-nav-item {{ selected }}">{{ title }}</a>
           {{/categories}}
         </nav>
       </div>
