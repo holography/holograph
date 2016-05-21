@@ -14,9 +14,37 @@ In addition to features found in Hologram, Holograph includes:
 
 ### Documenting your styles
 
-Holograph will scan for stylesheets (`.css`, `.scss`, `.sass`, `.less`, `.styl`) within the source directory defined in your configuration. It will find holograph comments and generate style guide sections from your comment's settings and content.
+Holograph will scan for stylesheets (`.css`, `.scss`, `.sass`, `.less`, `.styl`) within the source directory defined in your configuration. It will find Holograph comments and generate style guide sections from your comment's settings and content.
 
-For more information and syntax, see [documenting your styles and components](https://github.com/trulia/hologram#documenting-your-styles-and-components) in the Hologram repo.
+Sample comment:
+
+    /*doc
+    ---
+    title: Buttons
+    name: buttons
+    category: atoms
+    ---
+
+    Button styles can be applied to any element. Typically you'll want to use either a `<button>` or an `<a>` element:
+
+    ```html_example
+    <button class="button">button element</button>
+    <a class="button" href="http://www.github.com">link element</a>
+    ```
+
+    ## Button types
+    
+    You can also show examples in markdown tables as follows:
+
+    Button                                                                  | Class
+    ----------------------------------------------------------------------- | -----------------
+    <button class="button">default button</button>                          | `button`
+    <button class="button button--primary">primary button</button>          | `button button--primary`
+    <button class="button button--secondary">secondary button</button>      | `button button--secondary`
+    <button class="button" disabled>disabled</button>                       | `button:disabled`
+    */
+
+For more information and syntax for these comments, see [documenting your styles and components](https://github.com/trulia/hologram#documenting-your-styles-and-components) in the Hologram repo.
 
 ### Colour palettes
 
@@ -52,7 +80,7 @@ The source file must contain a comment with the usual meta information (`title`,
 * [referencing other components](https://github.com/trulia/hologram#referencing-other-components)
 
 ### Features not in scope
-* support for colour values in palettes that require compilation, such as `darken($brand-primary, 10%)` and nested colour variables.
+* support for colour values in palettes that require compilation, such as `darken($brand-primary, 10%)` and nested colour variables
 
 ## Getting help
 
