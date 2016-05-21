@@ -80,7 +80,7 @@ function parseMarkdown(text) {
 }
 
 function extractComment(file) {
-    var doc = /\/\*doc\n([\s\S]*)\*\//m;
+    var doc = /\/\*doc\n([\s\S]*?)\*\//m;
     var comment = fs.readFileSync(file, 'utf8').match(doc);
     return comment;
 }
