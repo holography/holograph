@@ -8,7 +8,7 @@ var search = require('recursive-search');
 var rmdir = require('rimraf');
 var ncp = require('ncp').ncp;
 var mustache = require('mustache');
-var config = yaml.safeLoad(fs.readFileSync('hologram_config.yml', 'utf8'));
+var config = yaml.safeLoad(fs.readFileSync('holograph_config.yml', 'utf8'));
 
 var Renderer = new marked.Renderer();
 
@@ -57,14 +57,18 @@ Renderer.code = function (code, lang) {
     var hl = require('highlight.js');
     var content = "";
     lang = lang || "html";
+
+    function renderCode(code, lang) {
+        return '<pre class="styleguide"><code>' + hl.highlight(lang, code).value + '</code></pre>';
+    }
+
     if (lang === 'html_example') {
-        content = '<div class="codeExample"><div class="exampleOutput">' + 
-            code +
-            '</div><div class="codeBlock"><pre class="styleguide"><code>' +
-            hl.highlight('html', code).value +
-            '</pre></code></div></div>';
+        content = '<div class="codeExample">' +
+            '<div class="exampleOutput">' + code + '</div>' +
+            '<div class="codeBlock">' + renderCode(code, lang) '</div>' +
+            '</div>';
     } else {
-        content = '<pre class="styleguide"><code>'+hl.highlight(lang, code).value+'</code></pre>';
+        content = renderCode(code, lang);
     }
     return content;
 };

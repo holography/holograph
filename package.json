@@ -1,12 +1,14 @@
 {
   "dependencies": {
-    "highlight.js": "^9.4.0",
-    "hologram-github-theme": "^0.1.4",
-    "js-yaml": "^3.6.1",
     "meta-marked": "^0.4.1",
+    "highlight.js": "^9.4.0",
+    "js-yaml": "^3.6.1",
     "mustache": "^2.2.1",
-    "ncp": "^2.0.0",
     "recursive-search": "^1.0.1",
+    "ncp": "^2.0.0",
     "rimraf": "^2.5.2"
-  }
+  },
+  "repository": "https://github.com/blongden/holograph",
+  "description": "node.js port of hologram",
+  "license": "MIT"
 }
