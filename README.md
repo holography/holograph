@@ -48,25 +48,9 @@ For more information and syntax for these comments, see [documenting your styles
 
 ### Colour palettes
 
-Holograph allows creation of colour palettes from your proprocessor stylesheets (`.scss`, `.sass`, `.less`, `.styl`). This feature is new for Holograph and is not found in Ruby Hologram.
+Holograph allows creation of colour palettes from your proprocessor stylesheets (`.css`, `.scss`, `.sass`, `.less`, `.styl`). This feature is new for Holograph and is not found in Ruby Hologram.
 
-<img src="docs/example-palettes.png?raw=true" width="75%" alt="colour palette example">
-
-The source file must contain a comment with the usual meta information (`title`, `category`, etc) required for Holograph. To mark colour variables to include in Holograph, use the following syntax:
-
-    $scss-variable: <value>;    // hg-palette: Palette name
-    $sass-variable: <value>     // hg-palette: Palette name
-    @less-variable: <value>;    // hg-palette: Palette name
-    $stylus-variable = <value>  // hg-palette: Palette name
-
-    $brand-primary: #3f8e7a;    // hg-palette: Brand
-    $brand-secondary: #d4e05c;  // hg-palette: Brand
-
-    $white: white;              // hg-palette: Monochrome
-    $grey: #ccc;                // hg-palette: Monochrome
-    $black: #000000;            // hg-palette: Monochrome
-
-**Note**: This feature does not support colour values that require compilation, such as `darken($brand-primary, 10%)` and nested colour variables.
+For documentation, see [how to use colour palettes](https://github.com/blongden/holograph/wiki/How-to-use-colour-palettes).
 
 ## How to test the software
 
