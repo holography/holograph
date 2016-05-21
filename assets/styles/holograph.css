@@ -7,12 +7,6 @@
     clear: both;
 }
 
-@media screen and (max-width: 600px) {
-    .hgt--xs-fill.hgt--xs-fill {
-        width: 100%;
-    }
-}
-
 /* ============================
     hgt responsive styles
 ============================ */
@@ -48,7 +42,10 @@
 }
 
 @media screen and (max-width: 600px) {
-    .hgt--xs-fill + .hgt--xs-fill {
+    .hgt-column--mobile.hgt-column--mobile {
+        width: 100%;
+    }
+    .hgt-column--mobile + .hgt-column--mobile {
         margin-top: 2em;
     }
     .hgt-sticky {
