@@ -14,6 +14,43 @@ function extractComment(file) {
     return comment;
 }
 
+function extractPalette(file) {
+    var source = fs.readFileSync(file, 'utf8');
+    var template = fs.readFileSync(config.documentation_assets + '/_swatches.html', 'utf8');
+
+    // fetch palettes
+    var match;
+    var palettes = {};
+    var pattern = /^\s*(.*?)\s*[:=]\s*(.*)\s*;?\s*\/\/\s*hg-palette:\s*(.*?)\s*$/mg;
+    while ((match = pattern.exec(source)) !== null) {
+        var paletteName = match[3];
+        var colourVariable = match[1];
+        var colourValue = match[2];
+        if (!palettes[paletteName]) {
+            palettes[paletteName] = [];
+        }
+        palettes[paletteName].push({
+            'name': colourVariable,
+            'value': colourValue
+        });
+    }
+
+    // convert to array
+    var paletteList = [];
+    for (var palette in palettes) {
+        paletteList.push({
+            'title': palette,
+            'colours': palettes[palette]
+        });
+    };
+
+    // create markup
+    var content = mustache.render(template, {
+        palettes: paletteList
+    });
+    return content;
+}
+
 function setupBuildDir(dir, assets, cb) {
     rmdir(dir, function() {
         fs.mkdir(dir);
@@ -34,17 +71,19 @@ function copyDependencies(dir, deps, cb) {
     });
 }
 
-
 function prepareCategories(results) {
     var pages = {};
 
     results.forEach(function(file) {
         var text = extractComment(file);
         if (text) {
-            var parsed = marked(text[1]);
+            var content = marked(text[1]);
 
-            if (!(pages.hasOwnProperty(parsed.meta.category))) { pages[parsed.meta.category] = []; }
-            pages[parsed.meta.category].push(parsed);
+            if (!(pages.hasOwnProperty(content.meta.category))) {
+                pages[content.meta.category] = [];
+            }
+            content.html += extractPalette(file);
+            pages[content.meta.category].push(content);
         }
     });
 
