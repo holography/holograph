@@ -22,7 +22,7 @@
 .hgt-pagehead-title {
     float: left;
 }
-.hgt-menu-item {
+.hgt-menu-item.hgt-menu-item {
     cursor: pointer;
 }
 
@@ -66,11 +66,14 @@ table.styleguide td {
     text-align: left;
     padding: 0 2em 2em 0;
 }
+table.styleguide th:last-child,
+table.styleguide td:last-child {
+    padding-right: 0;
+}
 
 @media screen and (max-width: 600px) {
     table.styleguide.styleguide {
         width: 100%;
-        margin-top: 2em;
     }
     table.styleguide thead {
         display: none;
@@ -78,11 +81,10 @@ table.styleguide td {
     table.styleguide tr + tr {
         display: block;
         border-top: 1px solid #eee;
-        margin-top: 1em;
-        padding-top: 2em;
     }
     table.styleguide td {
         display: block;
-        padding: 0 0 1em;
+        margin: 2em 0;
+        padding: 0;
     }
 }
