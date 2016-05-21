@@ -1,79 +1,12 @@
 'use strict';
 /*jslint node: true, stupid: true */
 
-var marked = require('meta-marked');
 var fs = require('fs');
-var yaml = require('js-yaml');
 var search = require('recursive-search');
 var rmdir = require('rimraf');
 var ncp = require('ncp').ncp;
 var mustache = require('mustache');
-var config = yaml.safeLoad(fs.readFileSync('holograph_config.yml', 'utf8'));
-
-var Renderer = new marked.Renderer();
-
-Renderer.list = function(body, ordered) {
-    var type = ordered ? 'ol' : 'ul';
-    return '<' + type + ' class="styleguide">\n' + body + '</' + type + '>\n';
-};
-
-Renderer.table = function(header, body) {
-      return '<table class="styleguide">\n'
-          + '<thead>\n'
-          + header
-          + '</thead>\n'
-          + '<tbody>\n'
-          + body
-          + '</tbody>\n'
-          + '</table>\n';
-};
-
-Renderer.blockquote = function(quote) {
-      return '<blockquote class="styleguide">\n' + quote + '</blockquote>\n';
-};
-
-Renderer.heading = function(text, level, raw) {
-      return '<h'
-          + level
-          + ' id="'
-          + this.options.headerPrefix
-          + raw.toLowerCase().replace(/[^\w]+/g, '-')
-          + '" class="styleguide">'
-          + text
-          + '</h'
-          + level
-          + '>\n';
-};
-
-Renderer.paragraph = function(text) {
-      return '<p class="styleguide">' + text + '</p>\n';
-};
-
-Renderer.codespan = function(text) {
-      return '<code class="styleguide">' + text + '</code>';
-};
-
-Renderer.code = function (code, lang) {
-    var hl = require('highlight.js');
-    var content = "";
-    lang = lang || "html";
-
-    function renderCode(code, lang) {
-        return '<pre class="styleguide"><code>' + hl.highlight(lang, code).value + '</code></pre>';
-    }
-
-    if (lang === 'html_example') {
-        content = '<div class="codeExample">' +
-            '<div class="exampleOutput">' + code + '</div>' +
-            '<div class="codeBlock">' + renderCode(code, 'html') + '</div>' +
-            '</div>';
-    } else {
-        content = renderCode(code, lang);
-    }
-    return content;
-};
-
-marked.setOptions({ renderer: Renderer });
+var marked = require('./markdown_renderer');
 
 function parseMarkdown(text) {
     return marked(text);
@@ -138,7 +71,7 @@ function preparePageLinks(pages) {
     return links;
 }
 
-function processFiles(results) {
+function processFiles(results, config) {
     var pages = prepareCategories(results);
     var links = preparePageLinks(pages);
     var category;
@@ -146,7 +79,7 @@ function processFiles(results) {
     for (category in pages) {
         if (pages.hasOwnProperty(category)) {
             var blocks = [];
-            var rawContent = fs.readFileSync(config.documentation_assets+'/_header.html', 'utf8');
+            var rawContent = fs.readFileSync(config.documentation_assets + '/_header.html', 'utf8');
 
             pages[category].forEach(function (block) {
                 rawContent += '<h1 id="'+block.meta.name+'" class="styleguide">'+block.meta.title+'</h1>';
@@ -179,8 +112,14 @@ function maybeThrowError(err) {
     if (err) { throw err; }
 }
 
-setupBuildDir(config.destination, config.documentation_assets, function() {
-    copyDependencies(config.destination, config.dependencies, function() {
-        search.recursiveSearch(/.scss$/, config.source, maybeThrowError, processFiles);
+function holograph(config) {
+    setupBuildDir(config.destination, config.documentation_assets, function() {
+        copyDependencies(config.destination, config.dependencies, function() {
+            search.recursiveSearch(/.scss$/, config.source, maybeThrowError, function(results) {
+                processFiles(results, config);
+            });
+        });
     });
-});
+}
+
+module.exports = holograph;
