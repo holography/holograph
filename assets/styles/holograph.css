@@ -1,0 +1,105 @@
+/* ============================
+    utilities
+============================ */
+.clearfix:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+@media screen and (max-width: 600px) {
+    .hgt--xs-fill.hgt--xs-fill {
+        width: 100%;
+    }
+}
+
+/* ============================
+    hgt responsive styles
+============================ */
+.hgt-container {
+    max-width: 100%;
+}
+.hgt-pagehead-title {
+    float: left;
+}
+.hgt-menu-item.hgt-menu-item {
+    cursor: pointer;
+}
+
+@media screen and (max-width: 1000px) {
+    .hgt-pagehead {
+        /*padding-bottom: 0;*/
+    }
+    .hgt-pagehead-title,
+    .hgt-pagehead-nav {
+        float: none;
+    }
+    .hgt-pagehead-nav-item {
+        margin: 1em 1em 0 0;
+        padding: 0.5em;
+    }
+    .hgt-container {
+        padding-right: 2em;
+        padding-left: 2em;
+    }
+    .hgt-sticky {
+        max-width: 22%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .hgt--xs-fill + .hgt--xs-fill {
+        margin-top: 2em;
+    }
+    .hgt-sticky {
+        position: static;
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+/* ============================
+    colour swatches
+============================ */
+.hgt-palette {
+    margin-bottom: 2em;
+}
+.hgt-palette .hgt-column {
+    margin-bottom: 1em;
+}
+.hgt-swatch {
+    margin-bottom: 1em;
+    padding-bottom: 60%;
+    border: 1px solid #ccc;
+}
+
+/* ============================
+    table styles
+============================ */
+table.styleguide th,
+table.styleguide td {
+    text-align: left;
+    padding: 0 2em 2em 0;
+}
+table.styleguide th:last-child,
+table.styleguide td:last-child {
+    padding-right: 0;
+}
+
+@media screen and (max-width: 600px) {
+    table.styleguide.styleguide {
+        width: 100%;
+    }
+    table.styleguide thead {
+        display: none;
+    }
+    table.styleguide tr + tr {
+        display: block;
+        border-top: 1px solid #eee;
+    }
+    table.styleguide td {
+        display: block;
+        margin: 2em 0;
+        padding: 0;
+    }
+}
