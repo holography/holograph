@@ -11,6 +11,23 @@ Holograph is a NPM module that parses comments in your CSS and turns them into a
 
 ## Usage
 
+### Colour palettes
+
+Holograph allows creation of colour palettes, a feature not found in Ruby Hologram. The source file with your palettes must contain a comment with the usual meta information required for Holograph.
+
+To mark colours to include in Holograph, use the following syntax with your palette names:
+
+    $variable-name: <value>;    // hg-palette: My palette name
+
+    $brand-primary: #3f8e7a;    // hg-palette: Brand
+    $brand-secondary: #d4e05c;  // hg-palette: Brand
+
+    $white: white;              // hg-palette: Monochrome
+    $grey: #ccc;                // hg-palette: Monochrome
+    $black: #000000;            // hg-palette: Monochrome
+
+**Note**: This feature does not support colour values that require compilation, such as `darken($brand-primary, 10%)` or nested colour variables.
+
 ## How to test the software
 
 ## Known issues
