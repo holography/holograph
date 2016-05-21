@@ -25,7 +25,7 @@ function extractPalette(file) {
     // fetch palettes
     var match;
     var palettes = {};
-    var pattern = /^\s*(.*?)\s*:\s*(.*)\s*;\s*\/\/\s*hg-palette:\s*(.*?)\s*$/mg;
+    var pattern = /^\s*(.*?)\s*[:=]\s*(.*)\s*;?\s*\/\/\s*hg-palette:\s*(.*?)\s*$/mg;
     while ((match = pattern.exec(source)) !== null) {
         var paletteName = match[3];
         var colourVariable = match[1];

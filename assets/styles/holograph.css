@@ -115,11 +115,15 @@ table.styleguide td:last-child {
 }
 
 /* ============================
-    other styles
+    other fixes
 ============================ */
 .hgt-content code.styleguide:before,
 .hgt-content code.styleguide:after,
 .hgt-content tt.styleguide:before,
 .hgt-content tt.styleguide:after {
     content: '\00a0';
+}
+
+.one-fourth:nth-of-type(4n+1) {
+    clear: left;
 }
