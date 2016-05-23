@@ -1,16 +1,19 @@
 {
   "dependencies": {
-    "meta-marked": "^0.4.1",
+    "colors": "^1.1.2",
     "highlight.js": "^9.4.0",
     "js-yaml": "^3.6.1",
+    "meta-marked": "^0.4.1",
     "mustache": "^2.2.1",
-    "recursive-search": "^1.0.1",
     "ncp": "^2.0.0",
+    "recursive-search": "^1.0.1",
     "rimraf": "^2.5.2"
   },
   "main": "./libs/holograph.js",
   "bin": "./bin/holograph",
   "repository": "https://github.com/blongden/holograph",
   "description": "node.js port of hologram",
-  "license": "MIT"
+  "license": "MIT",
+  "version": "0.0.1",
+  "name": "holograph"
 }
