@@ -47,7 +47,7 @@
     .hgt-column--mobile + .hgt-column--mobile {
         margin-top: 2em;
     }
-    .hgt-sticky {
+    .hgt-sticky.hgt-sticky {
         position: static;
         width: 100%;
         max-width: 100%;
