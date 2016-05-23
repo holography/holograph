@@ -88,6 +88,12 @@ If you have questions, concerns, bug reports, etc, please file an issue in this 
 
 ## Getting involved
 
+1. Fork it
+1. Create your feature/bug fix branch (git checkout -b my-new-feature)
+1. Commit your changes (git commit -am 'Add some feature')
+1. Push to the branch (git push origin my-new-feature)
+1. Create new Pull Request
+
 ## More about the project
 
 ### Contributors
