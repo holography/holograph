@@ -8,9 +8,25 @@ In addition to features found in Hologram, Holograph includes:
 
 ## Installation
 
+Install the latest release from npm with (add --save or --save-dev to add the dependency to your project)
+
+`npm install holograph`
+
 ## Configuration
 
+Copy the template config into your project root
+
+`cp node_modules/holograph/holograph_config.yml .`
+
+The config file contains inline documentation for each entry, update it at this point to match your project.
+
 ## Usage
+
+The binary takes no parameters and just reads all options from the config file
+
+`node_modules/.bin/holograph`
+
+The default build location is `./holograph/`. You can configure this by setting the `destination` value in `holograph_config.yml`.
 
 ### Documenting your styles
 

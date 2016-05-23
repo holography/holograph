@@ -10,8 +10,7 @@ destination: ./holograph
 # The assets needed to build the docs (includes header.html,
 # footer.html, etc)
 # You may put doc related assets here too: images, css, etc.
-documentation_assets: ./assets
-#documentation_assets: node_modules/hologram-github-theme
+documentation_assets: ./node_modules/holograph/assets
 
 # Any other asset folders that need to be copied to the destination
 # folder. Typically this will include the css that you are trying to
