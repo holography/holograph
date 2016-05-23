@@ -96,7 +96,6 @@ function preparePageLinks(current, pages) {
         title: 'Home',
         selected: current === 'index' ? 'selected' : ''
     }];
-    
     var category;
 
     for (category in pages) {
@@ -110,6 +109,13 @@ function preparePageLinks(current, pages) {
     }
 
     return links;
+}
+
+function getExtensions(config) {
+    var defaultExtensions = ['css', 'scss', 'less', 'sass', 'styl', 'js', 'md', 'markdown'];
+    var extensions =  config.custom_extensions || defaultExtensions;
+
+    return extensions.join('|');
 }
 
 function processFiles(results, config) {
@@ -167,9 +173,11 @@ function maybeThrowError(err) {
 }
 
 function holograph(config) {
+    var filter = new RegExp('\\.(' + getExtensions(config) + ')$');
+
     setupBuildDir(config.destination, config.documentation_assets, function() {
         copyDependencies(config.destination, config.dependencies, function() {
-            search.recursiveSearch(/.scss$/, config.source, maybeThrowError, function(results) {
+            search.recursiveSearch(filter, config.source, maybeThrowError, function(results) {
                 processFiles(results, config);
             });
         });
