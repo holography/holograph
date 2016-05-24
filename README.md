@@ -107,5 +107,6 @@ If you have questions, concerns, bug reports, etc, please file an issue in this 
 
 ### Credits and references
 
-* [hologram](https://trulia.github.io/hologram/)
-* [hologram-github-template](https://github.com/wearecube/hologram-github-theme)
+* [Hologram](https://trulia.github.io/hologram/)
+* Base theme css: [hologram-github-template](https://github.com/wearecube/hologram-github-theme)
+* Syntax: [highlight.js](https://highlightjs.org/) using `github-gist` theme
