@@ -9,11 +9,11 @@
     "recursive-search": "^1.0.1",
     "rimraf": "^2.5.2"
   },
-  "main": "./libs/holograph.js",
-  "bin": "./bin/holograph",
-  "repository": "https://github.com/blongden/holograph",
-  "description": "node.js port of hologram",
+  "main": "./libs/holography.js",
+  "bin": "./bin/holography",
+  "repository": "https://github.com/blongden/holography",
+  "description": "Holograph is a NPM module that parses comments in your CSS and turns them into a beautiful style guide.",
   "license": "MIT",
   "version": "0.0.3",
-  "name": "holograph"
+  "name": "holography"
 }
