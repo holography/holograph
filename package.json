@@ -14,6 +14,6 @@
   "repository": "https://github.com/blongden/holography",
   "description": "Holograph is a NPM module that parses comments in your CSS and turns them into a beautiful style guide.",
   "license": "MIT",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "name": "holography"
 }
