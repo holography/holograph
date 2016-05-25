@@ -186,7 +186,7 @@ function maybeThrowError(err) {
     if (err) { throw err; }
 }
 
-function holography(config, cb) {
+function holograph(config, cb) {
     var results = [];
     setupBuildDir(config.destination, config.documentation_assets, function() {
         copyDependencies(config.destination, config.dependencies, function() {
@@ -212,7 +212,7 @@ function showError(e) {
 }
 
 function run() {
-    fs.readFile('holography_config.yml', 'utf8',
+    fs.readFile('holograph_config.yml', 'utf8',
         function(err, data) {
             if (err) {
                 if (err.code === 'ENOENT') {
@@ -221,7 +221,7 @@ function run() {
                 showError(err);
             }
 
-            holography(yaml.safeLoad(data), function() {
+            holograph(yaml.safeLoad(data), function() {
                 console.log('Build successful \\o\/'.green);
             });
         }
@@ -229,6 +229,6 @@ function run() {
 }
 
 module.exports = {
-    holography: holography,
+    holograph: holograph,
     run: run
 };
