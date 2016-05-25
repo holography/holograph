@@ -2,7 +2,8 @@
 /*jslint node: true, stupid: true */
 
 var fs = require('fs');
-var search = require('recursive-search');
+var path = require('path');
+var filterFiles = require('dive');
 var rmdir = require('rimraf');
 var ncp = require('ncp').ncp;
 var mustache = require('mustache');
@@ -62,7 +63,6 @@ function setupBuildDir(dir, assets, cb) {
 }
 
 function copyDependencies(dir, deps, cb) {
-    var path = require('path');
     var source = deps.shift();
     ncp(source, dir+'/'+path.basename(source), function(err) {
         if (err) { throw err; }
@@ -96,7 +96,6 @@ function preparePageLinks(current, pages) {
         title: 'Home',
         selected: current === 'index' ? 'selected' : ''
     }];
-    
     var category;
 
     for (category in pages) {
@@ -110,6 +109,13 @@ function preparePageLinks(current, pages) {
     }
 
     return links;
+}
+
+function allowedExtension(config, file) {
+    var defaultExtensions = ['.css', '.scss', '.less', '.sass', '.styl', '.js', '.md', '.markdown'];
+    var extensions =  config.custom_extensions || defaultExtensions;
+
+    return extensions.indexOf(path.extname(file)) !== -1;
 }
 
 function processFiles(results, config) {
@@ -167,9 +173,18 @@ function maybeThrowError(err) {
 }
 
 function holograph(config) {
+    var results = [];
     setupBuildDir(config.destination, config.documentation_assets, function() {
         copyDependencies(config.destination, config.dependencies, function() {
-            search.recursiveSearch(/.scss$/, config.source, maybeThrowError, function(results) {
+            filterFiles(config.source, function (err, file) {
+                if (err) {
+                    maybeThrowError(err);
+                } else {
+                    if (allowedExtension(config, file)) {
+                        results.push(file);
+                    }
+                }
+            }, function() {
                 processFiles(results, config);
             });
         });
