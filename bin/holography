@@ -12,7 +12,7 @@ function showError(e) {
 }
 
 function cli() {
-    fs.readFile('holograph_config.yml', 'utf8',
+    fs.readFile('holography_config.yml', 'utf8',
         function(err, data) {
             if (err) {
                 if (err.code === 'ENOENT') {
