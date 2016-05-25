@@ -6,7 +6,7 @@
     "meta-marked": "^0.4.1",
     "mustache": "^2.2.1",
     "ncp": "^2.0.0",
-    "recursive-search": "^1.0.1",
+    "dive": "^0.5.0",
     "rimraf": "^2.5.2"
   },
   "main": "./libs/holography.js",

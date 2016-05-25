@@ -22,15 +22,14 @@
 
 @media screen and (max-width: 1000px) {
     .hgt-pagehead {
-        /*padding-bottom: 0;*/
+        padding-bottom: 0;
     }
     .hgt-pagehead-title,
     .hgt-pagehead-nav {
         float: none;
     }
     .hgt-pagehead-nav-item {
-        margin: 1em 1em 0 0;
-        padding: 0.5em;
+        margin: 0 20px 0 0;
     }
     .hgt-container {
         padding-right: 2em;
@@ -48,7 +47,7 @@
     .hgt-column--mobile + .hgt-column--mobile {
         margin-top: 2em;
     }
-    .hgt-sticky {
+    .hgt-sticky.hgt-sticky {
         position: static;
         width: 100%;
         max-width: 100%;

@@ -51,7 +51,7 @@ Sample comment:
     ```
 
     ## Button types
-    
+
     You can also show examples in markdown tables as follows:
 
     Button                                                                  | Class
@@ -81,8 +81,9 @@ For documentation, see [how to use colour palettes](https://github.com/blongden/
 * support for JavaScript content
 * [referencing other components](https://github.com/trulia/hologram#referencing-other-components)
 
-### Features not in scope
-* support for colour values in palettes that require compilation, such as `darken($brand-primary, 10%)` and nested colour variables
+### Unsupported features
+* colour values in palettes that require compilation, such as `darken($brand-primary, 10%)` and nested colour variables
+* Ruby-specific: `.erb` as a source and 'slim' for templates
 
 ## Getting help
 
@@ -109,5 +110,6 @@ If you have questions, concerns, bug reports, etc, please file an issue in this 
 
 ### Credits and references
 
-* [hologram](https://trulia.github.io/hologram/)
-* [hologram-github-template](https://github.com/wearecube/hologram-github-theme)
+* [Hologram](https://trulia.github.io/hologram/)
+* Base theme css: [hologram-github-template](https://github.com/wearecube/hologram-github-theme)
+* Syntax: [highlight.js](https://highlightjs.org/) using `github-gist` theme
