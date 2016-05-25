@@ -1,33 +1,5 @@
 #!/usr/bin/env node
 
-var fs = require('fs');
-var yaml = require('js-yaml');
-var holograph = require('../');
-var colors = require('colors');
+var holography = require('../');
 
-function showError(e) {
-    console.log(e.message);
-    console.log('Build failed (╯°□°）╯︵ ┻━┻)'.red);
-    process.exit(1);
-}
-
-function cli() {
-    fs.readFile('holography_config.yml', 'utf8',
-        function(err, data) {
-            if (err) {
-                if (err.code === 'ENOENT') {
-                    console.log('Could not load config file.');
-                }
-                showError(err);
-            }
-            holograph(yaml.safeLoad(data));
-            console.log('Build successful \\o\/'.green);
-        }
-    );
-}
-
-try {
-    cli();
-} catch(e) {
-    showError(e);
-}
+holography.run();
