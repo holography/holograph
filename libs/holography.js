@@ -8,6 +8,8 @@ var rmdir = require('rimraf');
 var ncp = require('ncp').ncp;
 var mustache = require('mustache');
 var marked = require('./markdown_renderer');
+var yaml = require('js-yaml');
+var colors = require('colors');
 
 function extractComment(file) {
     var doc = /\/\*doc\n([\s\S]*?)\*\//m;
@@ -118,61 +120,73 @@ function allowedExtension(config, file) {
     return extensions.indexOf(path.extname(file)) !== -1;
 }
 
-function processFiles(results, config) {
+function generatePage(config, page) {
+    var blocks = [];
+    var rawContent = fs.readFileSync(config.documentation_assets + '/_header.html', 'utf8');
+
+    page.forEach(function (block) {
+        rawContent += '<h1 id="'+block.meta.name+'" class="styleguide">'+block.meta.title+'</h1>';
+        rawContent += block.html;
+
+        blocks.push({
+            name: block.meta.name,
+            title: block.meta.title
+        });
+    });
+
+    rawContent += fs.readFileSync(config.documentation_assets +'/_footer.html', 'utf8');
+
+    return {
+        content: rawContent,
+        blocks: blocks
+    }
+}
+
+function processFiles(results, config, cb) {
     var pages = prepareCategories(results, config);
-    var category;
+    var category, content;
 
     for (category in pages) {
         if (pages.hasOwnProperty(category)) {
-            var blocks = [];
-            var rawContent = fs.readFileSync(config.documentation_assets + '/_header.html', 'utf8');
-
-            pages[category].forEach(function (block) {
-                rawContent += '<h1 id="'+block.meta.name+'" class="styleguide">'+block.meta.title+'</h1>';
-                rawContent += block.html;
-
-                blocks.push({
-                    name: block.meta.name,
-                    title: block.meta.title
-                });
-            });
-
-            rawContent += fs.readFileSync(config.documentation_assets +'/_footer.html', 'utf8');
-
-            var content = mustache.render(
-                rawContent,
-                {
-                    title: category,
-                    config: config,
-                    categories: preparePageLinks(category, pages),
-                    blocks: blocks
-                }
+            content = generatePage(config, pages[category])
+            fs.writeFile(
+                config.destination + '/' + category + '.html',
+                mustache.render(
+                    content.content,
+                    {
+                        title: category,
+                        config: config,
+                        categories: preparePageLinks(category, pages),
+                        blocks: content.blocks
+                    }
+                )
             );
 
-            fs.writeFile(config.destination + '/' + category + '.html', content);
-
             if (category === config.index) {
-                content = mustache.render(
-                    rawContent,
-                    {
-                        title: 'index',
-                        config: config,
-                        categories: preparePageLinks('index', pages),
-                        blocks: blocks
-                    }
-                );
-                fs.writeFile(config.destination + '/index.html', content);
+                fs.writeFile(
+                    config.destination + '/index.html',
+                    mustache.render(
+                        content.content,
+                        {
+                            title: 'index',
+                            config: config,
+                            categories: preparePageLinks('index', pages),
+                            blocks: content.blocks
+                        }
+                    )
+                )
             }
-
         }
     }
+
+    if (cb) cb();
 }
 
 function maybeThrowError(err) {
     if (err) { throw err; }
 }
 
-function holograph(config) {
+function holography(config, cb) {
     var results = [];
     setupBuildDir(config.destination, config.documentation_assets, function() {
         copyDependencies(config.destination, config.dependencies, function() {
@@ -185,10 +199,36 @@ function holograph(config) {
                     }
                 }
             }, function() {
-                processFiles(results, config);
+                processFiles(results, config, cb);
             });
         });
     });
 }
 
-module.exports = holograph;
+function showError(e) {
+    console.log(e.message);
+    console.log('Build failed (╯°□°）╯︵ ┻━┻)'.red);
+    process.exit(1);
+}
+
+function run() {
+    fs.readFile('holography_config.yml', 'utf8',
+        function(err, data) {
+            if (err) {
+                if (err.code === 'ENOENT') {
+                    console.log('Could not load config file.');
+                }
+                showError(err);
+            }
+
+            holography(yaml.safeLoad(data), function() {
+                console.log('Build successful \\o\/'.green);
+            });
+        }
+    );
+}
+
+module.exports = {
+    holography: holography,
+    run: run
+};
