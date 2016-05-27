@@ -38,31 +38,19 @@ Sample comment:
 
     /*doc
     ---
-    title: Buttons
-    name: buttons
-    category: atoms
+    title: Headings
+    name: headings
+    category: typography
     ---
 
-    Button styles can be applied to any element. Typically you'll want to use either a `<button>` or an `<a>` element:
+    Headings should follow appropriate heading hierarchy.
 
     ```html_example
-    <button class="button">button element</button>
-    <a class="button" href="http://www.github.com">link element</a>
+        <h1>Hello, world!</h1>
     ```
-
-    ## Button types
-
-    You can also show examples in markdown tables as follows:
-
-    Button                                                                  | Class
-    ----------------------------------------------------------------------- | -----------------
-    <button class="button">default button</button>                          | `button`
-    <button class="button button--primary">primary button</button>          | `button button--primary`
-    <button class="button button--secondary">secondary button</button>      | `button button--secondary`
-    <button class="button" disabled>disabled</button>                       | `button:disabled`
     */
 
-For more information and syntax for these comments, see [documenting your styles and components](https://github.com/trulia/hologram#documenting-your-styles-and-components) in the Hologram repo.
+For more complete documentation, see [how to document your components](https://github.com/holography/holograph/wiki/How-to-document-your-components).
 
 ### Colour palettes
 
