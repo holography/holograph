@@ -50,7 +50,7 @@ Sample comment:
     ```
     */
 
-For more complete documentation, see [how to document your components](https://github.com/holography/holograph/wiki/How-to-document-your-components).
+_For more complete documentation, see [how to document your components](https://github.com/holography/holograph/wiki/How-to-document-your-components)._
 
 ### Colour palettes
 
@@ -60,7 +60,7 @@ In brief, to mark colour variables to include in Holograph, use the following co
 
     $variable-name: <value>;    // hg-palette: Palette name
 
-For more complete documentation, see [how to use colour palettes](https://github.com/holography/holograph/wiki/How-to-use-colour-palettes).
+_For more complete documentation, see [how to use colour palettes](https://github.com/holography/holograph/wiki/How-to-use-colour-palettes)._
 
 ## How to test the software
 
