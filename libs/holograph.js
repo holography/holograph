@@ -24,11 +24,11 @@ function extractPalette(file, config) {
     // fetch palettes
     var match;
     var palettes = {};
-    var pattern = /^\s*(.*?)\s*[:=]\s*(.*)\s*;?\s*\/\/\s*hg-palette:\s*(.*?)\s*$/mg;
+    var pattern = /^(.*?)[:=](.*?);?\s*\/\/\s*hg-palette:(.*?)$/mg;
     while ((match = pattern.exec(source)) !== null) {
-        var paletteName = match[3];
-        var colourVariable = match[1];
-        var colourValue = match[2];
+        var paletteName = match[3].trim();
+        var colourVariable = match[1].trim();
+        var colourValue = match[2].trim();
         if (!palettes[paletteName]) {
             palettes[paletteName] = [];
         }
