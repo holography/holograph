@@ -55,9 +55,21 @@ function extractPalette(file, config) {
 }
 
 function setupBuildDir(dir, assets, cb) {
-    rmdir(dir, function() {
+    var ncpOptions = {
+        filter: function(filePath) {
+            var relPath = path.relative(assets, filePath);
+            if (relPath == '') {
+                return true;
+            }
+            var folder = relPath.split(path.sep)[0];
+            return (folder == 'scripts' || folder == 'styles');
+        }
+    }
+
+    rmdir(dir, function(err) {
+        if (err) { throw err; }
         fs.mkdir(dir);
-        ncp(assets, dir, function(err) {
+        ncp(assets, dir, ncpOptions, function(err) {
             if (err) { throw err; }
             cb();
         });
