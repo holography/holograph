@@ -56,7 +56,11 @@ For more complete documentation, see [how to document your components](https://g
 
 Holograph allows creation of colour palettes from your proprocessor stylesheets (`.css`, `.scss`, `.sass`, `.less`, `.styl`). This feature is new for Holograph and is not found in Ruby Hologram.
 
-For documentation, see [how to use colour palettes](https://github.com/holography/holograph/wiki/How-to-use-colour-palettes).
+In brief, to mark colour variables to include in Holograph, use the following comment syntax:
+
+    $variable-name: <value>;    // hg-palette: Palette name
+
+For more complete documentation, see [how to use colour palettes](https://github.com/holography/holograph/wiki/How-to-use-colour-palettes).
 
 ## How to test the software
 
