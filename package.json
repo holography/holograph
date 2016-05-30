@@ -15,5 +15,10 @@
   "description": "Holograph is a NPM module that parses comments in your CSS and turns them into a beautiful style guide.",
   "license": "MIT",
   "version": "0.0.5",
-  "name": "holograph"
+  "name": "holograph",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3",
+    "mock-fs": "^3.9.0"
+  }
 }

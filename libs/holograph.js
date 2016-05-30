@@ -11,15 +11,37 @@ var marked = require('./markdown_renderer');
 var yaml = require('js-yaml');
 var colors = require('colors');
 
+function showError(message) {
+    if (message) {
+        console.log(message);
+        console.log('Build failed (╯°□°）╯︵ ┻━┻)'.red);
+        process.exit(1);
+    }
+}
+
 function extractComment(file) {
     var doc = /\/\*doc\n([\s\S]*?)\*\//m;
-    var comment = fs.readFileSync(file, 'utf8').match(doc);
+    var comment;
+    try {
+        comment = fs.readFileSync(file, 'utf8').match(doc);
+    } catch(err) {
+        showError(err.message);
+    }
     return comment;
 }
 
 function extractPalette(file, config) {
-    var source = fs.readFileSync(file, 'utf8');
-    var template = fs.readFileSync(config.documentation_assets + '/_swatches.html', 'utf8');
+    try {
+        var source = fs.readFileSync(file, 'utf8');
+    } catch (err) {
+        showError(err.message);
+    }
+
+    try {
+        var template = fs.readFileSync(config.documentation_assets + '/_swatches.html', 'utf8');
+    } catch (err) {
+        showError(err.message);
+    }
 
     // fetch palettes
     var match;
@@ -54,12 +76,13 @@ function extractPalette(file, config) {
     return content;
 }
 
-function setupBuildDir(dir, assets, cb) {
-    rmdir(dir, function() {
+function setupBuildDir(dir, assets, callback) {
+    rmdir(dir, function(err) {
+        if (err) callback(err);
         fs.mkdir(dir);
         ncp(assets, dir, function(err) {
-            if (err) { throw err; }
-            cb();
+            if (err && err.code === 'ENOENT') callback(new Error('Couldn\'t find a directory, most likely ' + assets + ' is missing.'));
+            callback();
         });
     });
 }
@@ -67,7 +90,7 @@ function setupBuildDir(dir, assets, cb) {
 function copyDependencies(dir, deps, cb) {
     var source = deps.shift();
     ncp(source, dir+'/'+path.basename(source), function(err) {
-        if (err) { throw err; }
+        if (err) { showError(err.message) }
         if (deps.length) { copyDependencies(dir, deps, cb); }
         cb();
     });
@@ -84,7 +107,7 @@ function prepareCategories(results, config) {
             if (!(pages.hasOwnProperty(content.meta.category))) {
                 pages[content.meta.category] = [];
             }
-            content.html += extractPalette(file, config);
+            //content.html += extractPalette(file, config);
             pages[content.meta.category].push(content);
         }
     });
@@ -186,29 +209,22 @@ function maybeThrowError(err) {
     if (err) { throw err; }
 }
 
-function holograph(config, cb) {
+function holograph(config, callback) {
     var results = [];
-    setupBuildDir(config.destination, config.documentation_assets, function() {
-        copyDependencies(config.destination, config.dependencies, function() {
+    setupBuildDir(config.destination, config.documentation_assets, function(err) {
+        if (err) callback(new Error(err.message));
+        copyDependencies(config.destination, config.dependencies, function(err) {
+            if (err) callback(new Error(err.message));
             filterFiles(config.source, function (err, file) {
-                if (err) {
-                    maybeThrowError(err);
-                } else {
-                    if (allowedExtension(config, file)) {
-                        results.push(file);
-                    }
+                if (err) callback(new Error(err.message));
+                if (allowedExtension(config, file)) {
+                    results.push(file);
                 }
             }, function() {
-                processFiles(results, config, cb);
+                processFiles(results, config, callback);
             });
         });
     });
-}
-
-function showError(e) {
-    console.log(e.message);
-    console.log('Build failed (╯°□°）╯︵ ┻━┻)'.red);
-    process.exit(1);
 }
 
 function run() {
@@ -216,12 +232,12 @@ function run() {
         function(err, data) {
             if (err) {
                 if (err.code === 'ENOENT') {
-                    console.log('Could not load config file.');
+                    showError('Could not find holograph_config.yml in the current directory.');
                 }
-                showError(err);
             }
 
-            holograph(yaml.safeLoad(data), function() {
+            holograph(yaml.safeLoad(data), function(err, result) {
+                showError(err);
                 console.log('Build successful \\o\/'.green);
             });
         }
