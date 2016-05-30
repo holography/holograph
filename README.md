@@ -68,6 +68,10 @@ _For more complete documentation, see [how to use colour palettes](https://githu
 
 ## How to test the software
 
+Tests are being written with [Mocha](https://mochajs.org/) and the [Chai](http://chaijs.com/) assertion library
+
+`node_modules/.bin/mocha`
+
 ## Known issues
 
 ### Incomplete features
