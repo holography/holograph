@@ -13,7 +13,7 @@ In addition to features found in Hologram, Holograph includes:
 Install the latest release from npm with:
 
     npm install holograph
-    
+
 Using the `--save` or `--save-dev` flag will add the dependency to your project's `package.json`.
 
 ## Configuration
@@ -24,7 +24,7 @@ Settings for your Holograph instance are found in `holograph_config.yml` and use
 
 Settings in this file include the relative location of dependencies (for your project and for Holograph), the destination path, and a title for your style guide.
 
-_For more complete documentation, see [how to use colour palettes](https://github.com/holography/holograph/wiki/How-to-use-colour-palettes)._
+_For more complete documentation, see [how to configure Holograph](/docs/configure-holograph.md)._
 
 ## Usage
 
@@ -54,7 +54,7 @@ Sample comment:
     ```
     */
 
-_For more complete documentation, see [how to document your components](https://github.com/holography/holograph/wiki/How-to-document-your-components)._
+_For more complete documentation, see [how to document your components](/docs/document-components.md)._
 
 ### Colour palettes
 
@@ -64,7 +64,7 @@ In brief, to mark colour variables to include in Holograph, use the following co
 
     $variable-name: <value>;    // hg-palette: Palette name
 
-_For more complete documentation, see [how to use colour palettes](https://github.com/holography/holograph/wiki/How-to-use-colour-palettes)._
+_For more complete documentation, see [how to use colour palettes](/docs/colour-palettes.md)._
 
 ## How to test the software
 
