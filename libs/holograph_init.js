@@ -66,7 +66,11 @@ module.exports = function(config, callback) {
             }
 
             filterFiles(config.source, function (err, file) {
-                if (err) callback(new Error(err.message));
+                if (err) {
+                    callback(new Error(err.message));
+                    return;
+                }
+
                 if (allowedExtension(config, file)) {
                     results.push(file);
                 }
