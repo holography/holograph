@@ -20,5 +20,8 @@
     "chai": "^3.5.0",
     "mocha": "^2.5.3",
     "mock-fs": "^3.9.0"
+  },
+  "scripts": {
+      "test": "./node_modules/bin/mocha"
   }
 }
