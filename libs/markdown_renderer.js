@@ -1,3 +1,4 @@
+'use strict';
 var marked = require('meta-marked');
 var Renderer = new marked.Renderer();
 

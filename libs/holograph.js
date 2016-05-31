@@ -2,14 +2,11 @@
 /*jslint node: true, stupid: true */
 
 var fs = require('fs');
-var path = require('path');
-var filterFiles = require('dive');
-var rmdir = require('rimraf');
-var ncp = require('ncp').ncp;
 var mustache = require('mustache');
-var marked = require('./markdown_renderer');
 var yaml = require('js-yaml');
 var colors = require('colors');
+var marked = require('./markdown_renderer');
+var init = require('./holograph_init');
 
 function showError(message) {
     if (message) {
@@ -76,26 +73,6 @@ function extractPalette(file, config) {
     return content;
 }
 
-function setupBuildDir(dir, assets, callback) {
-    rmdir(dir, function(err) {
-        if (err) callback(err);
-        fs.mkdir(dir);
-        ncp(assets, dir, function(err) {
-            if (err && err.code === 'ENOENT') callback(new Error('Couldn\'t find a directory, most likely ' + assets + ' is missing.'));
-            callback();
-        });
-    });
-}
-
-function copyDependencies(dir, deps, cb) {
-    var source = deps.shift();
-    ncp(source, dir+'/'+path.basename(source), function(err) {
-        if (err) { showError(err.message) }
-        if (deps.length) { copyDependencies(dir, deps, cb); }
-        cb();
-    });
-}
-
 function prepareCategories(results, config) {
     var pages = {};
 
@@ -134,13 +111,6 @@ function preparePageLinks(current, pages) {
     }
 
     return links;
-}
-
-function allowedExtension(config, file) {
-    var defaultExtensions = ['.css', '.scss', '.less', '.sass', '.styl', '.js', '.md', '.markdown'];
-    var extensions =  config.custom_extensions || defaultExtensions;
-
-    return extensions.indexOf(path.extname(file)) !== -1;
 }
 
 function generatePage(config, page) {
@@ -210,20 +180,9 @@ function maybeThrowError(err) {
 }
 
 function holograph(config, callback) {
-    var results = [];
-    setupBuildDir(config.destination, config.documentation_assets, function(err) {
-        if (err) callback(new Error(err.message));
-        copyDependencies(config.destination, config.dependencies, function(err) {
-            if (err) callback(new Error(err.message));
-            filterFiles(config.source, function (err, file) {
-                if (err) callback(new Error(err.message));
-                if (allowedExtension(config, file)) {
-                    results.push(file);
-                }
-            }, function() {
-                processFiles(results, config, callback);
-            });
-        });
+    init(config, callback, function(err, results) {
+        if(err) { callback(err); }
+        processFiles(results, config, callback);
     });
 }
 
