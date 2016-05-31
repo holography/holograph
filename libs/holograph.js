@@ -180,7 +180,7 @@ function maybeThrowError(err) {
 }
 
 function holograph(config, callback) {
-    init(config, callback, function(err, results) {
+    init(config, function(err, results) {
         if(err) { callback(err); }
         processFiles(results, config, callback);
     });
