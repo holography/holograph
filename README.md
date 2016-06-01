@@ -70,7 +70,7 @@ _For more complete documentation, see [how to use colour palettes](https://githu
 
 Tests are being written with [Mocha](https://mochajs.org/) and the [Chai](http://chaijs.com/) assertion library
 
-`node_modules/.bin/mocha`
+`npm test`
 
 ## Known issues
 
