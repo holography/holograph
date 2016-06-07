@@ -61,8 +61,8 @@ function setupBuildDir(dir, assets, cb) {
             if (relPath == '') {
                 return true;
             }
-            var folder = relPath.split(path.sep)[0];
-            return (folder == 'scripts' || folder == 'styles');
+            var fileName = path.basename(relPath);
+            return (fileName[0] != '_');
         }
     }
 
