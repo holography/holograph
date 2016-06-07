@@ -10,17 +10,21 @@ In addition to features found in Hologram, Holograph includes:
 
 ## Installation
 
-Install the latest release from npm with (add --save or --save-dev to add the dependency to your project)
+Install the latest release from npm with:
 
-`npm install holograph`
+    npm install holograph
+
+Using the `--save` or `--save-dev` flag will add the dependency to your project's `package.json`.
 
 ## Configuration
 
-Copy the template config into your project root
+Settings for your Holograph instance are found in `holograph_config.yml` and use YAML syntax. To begin, copy the template configuration file into your project root with:
 
-`cp node_modules/holograph/holograph_config.yml .`
+    cp node_modules/holograph/holograph_config.yml .
 
-The config file contains inline documentation for each entry, update it at this point to match your project.
+Settings in this file include the relative location of dependencies (for your project and for Holograph), the destination path, and a title for your style guide.
+
+_For more complete documentation, see [how to configure Holograph](/docs/configure-holograph.md)._
 
 ## Usage
 
@@ -50,15 +54,23 @@ Sample comment:
     ```
     */
 
-For more complete documentation, see [how to document your components](https://github.com/holography/holograph/wiki/How-to-document-your-components).
+_For more complete documentation, see [how to document your components](/docs/document-components.md)._
 
 ### Colour palettes
 
 Holograph allows creation of colour palettes from your proprocessor stylesheets (`.css`, `.scss`, `.sass`, `.less`, `.styl`). This feature is new for Holograph and is not found in Ruby Hologram.
 
-For documentation, see [how to use colour palettes](https://github.com/holography/holograph/wiki/How-to-use-colour-palettes).
+In brief, to mark colour variables to include in Holograph, use the following comment syntax:
+
+    $variable-name: <value>;    // hg-palette: Palette name
+
+_For more complete documentation, see [how to use colour palettes](/docs/colour-palettes.md)._
 
 ## How to test the software
+
+Tests are being written with [Mocha](https://mochajs.org/) and the [Chai](http://chaijs.com/) assertion library
+
+`node_modules/.bin/mocha`
 
 ## Known issues
 
