@@ -4,7 +4,7 @@ var mock = require("mock-fs");
 var init = require("../libs/holograph_init");
 
 describe("Holograph", function() {
-    describe("Initialise", function() {
+    describe("Setup Build Directory", function() {
         mock({
             'noaccess': mock.directory({
                 mode: '0700',
@@ -17,6 +17,11 @@ describe("Holograph", function() {
             'src': mock.directory({
                 items: {
                     'main.scss': "h1 { color: red; }"
+                }
+            }),
+            'assets': mock.directory({
+                items: {
+                    'style.css': "h1 { color: blue; }"
                 }
             })
         });
@@ -40,10 +45,29 @@ describe("Holograph", function() {
             });
         });
 
-        it("errs when the source directory does not exist", function() {
-            init({ destination: "./hologram", source: "./dshd" }, function(err) {
+        it("errs when the source directory does not exist", function(done) {
+            init({ destination: "./hologram", source: "./foo" }, function(err) {
                 expect(err).to.be.an('error');
                 expect(err.message).to.have.string('ENOENT');
+                done();
+            });
+        });
+
+        it("errs when the documentation_assets directory does not exist", function(done) {
+            init({ destination: "./hologram", source: "./src", documentation_assets: "./foo"}, function(err) {
+                expect(err).to.be.an('error');
+                done();
+            });
+        });
+
+        it("copies the documentation_assets into the destination", function(done) {
+            init({ destination: "./hologram", source: "./src", documentation_assets: "./assets"}, function(err) {
+                expect(err).to.be.null;
+                fs.lstat('./hologram/style.css', function(err, stats) {
+                    expect(err).to.be.null;
+                    expect(stats.isFile()).to.be.true;
+                    done();
+                });
             });
         });
     });

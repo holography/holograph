@@ -9,24 +9,24 @@ var filterFiles = require('dive');
 function setupBuildDir(dir, assets, callback) {
     rmdir(dir, function(err) {
         if (err) {
-            callback(new Error(err.message));
+            return callback(new Error(err.message));
         }
 
         fs.mkdir(dir, function(err) {
             if (err) {
-                callback(new Error(err.message));
+                return callback(new Error(err.message));
             }
 
             if (assets) {
                 ncp(assets, dir, function(err) {
-                    if (err && err.code === 'ENOENT') {
-                        callback(new Error('Couldn\'t find a directory, most likely ' + assets + ' is missing.'));
+                    if (err) {
+                        return callback(new Error('Couldn\'t find a directory, most likely ' + assets + ' is missing.'));
                     }
 
-                    callback();
+                    return callback();
                 });
             } else {
-                callback();
+                return callback();
             }
         });
     });
@@ -36,11 +36,13 @@ function copyDependencies(dir, deps, cb) {
     if (deps && deps.length) {
         var source = deps.shift();
         ncp(source, dir + '/' + path.basename(source), function(err) {
-            if (err) { showError(err.message) }
-            copyDependencies(dir, deps, cb);
+            if (err) {
+                return showError(err.message);
+            }
+            return copyDependencies(dir, deps, cb);
         });
     } else {
-        cb();
+        return cb();
     }
 }
 
@@ -55,27 +57,24 @@ module.exports = function(config, callback) {
     var results = [];
     setupBuildDir(config.destination, config.documentation_assets, function(err) {
         if (err) {
-            callback(new Error(err.message));
-            return;
+            return callback(new Error(err.message));
         }
 
         copyDependencies(config.destination, config.dependencies, function(err) {
             if (err) {
-                callback(new Error(err.message));
-                return;
+                return callback(new Error(err.message));
             }
 
             filterFiles(config.source, function (err, file) {
                 if (err) {
-                    callback(new Error(err.message));
-                    return;
+                    return callback(new Error(err.message));
                 }
 
                 if (allowedExtension(config, file)) {
                     results.push(file);
                 }
             }, function() {
-                callback(null, results);
+                return callback(null, results);
             });
         });
     });
