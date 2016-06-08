@@ -7,6 +7,17 @@ var filterFiles = require('dive');
 
 
 function setupBuildDir(dir, assets, callback) {
+    var ncpOptions = {
+        filter: function(filePath) {
+            var relPath = path.relative(assets, filePath);
+            if (relPath == '') {
+                return true;
+            }
+            var fileName = path.basename(relPath);
+            return (fileName[0] != '_');
+        }
+    }
+
     rmdir(dir, function(err) {
         if (err) {
             return callback(new Error(err.message));
@@ -18,7 +29,7 @@ function setupBuildDir(dir, assets, callback) {
             }
 
             if (assets) {
-                ncp(assets, dir, function(err) {
+                ncp(assets, dir, ncpOptions, function(err) {
                     if (err) {
                         return callback(new Error('Couldn\'t find a directory, most likely ' + assets + ' is missing.'));
                     }

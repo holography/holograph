@@ -1,5 +1,7 @@
 # Holograph (alpha)
 
+[![Join the chat at https://gitter.im/holography/holograph](https://badges.gitter.im/holography/holograph.svg)](https://gitter.im/holography/holograph?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 > the study or production of holograms.
 
 Holograph is a NPM module that parses comments in your CSS and turns them into a beautiful style guide. It is initially a port of the excellent work done by the [Hologram Ruby gem](https://trulia.github.io/hologram/) and aims to be compatible with most of its features.
