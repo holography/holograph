@@ -77,10 +77,20 @@ function extractPalette(file, config) {
 }
 
 function setupBuildDir(dir, assets, callback) {
+    var ncpOptions = {
+        filter: function(filePath) {
+            var relPath = path.relative(assets, filePath);
+            if (relPath == '') {
+                return true;
+            }
+            var fileName = path.basename(relPath);
+            return (fileName[0] != '_');
+        }
+    }
     rmdir(dir, function(err) {
         if (err) callback(err);
         fs.mkdir(dir);
-        ncp(assets, dir, function(err) {
+        ncp(assets, dir, ncpOptions, function(err) {
             if (err && err.code === 'ENOENT') callback(new Error('Couldn\'t find a directory, most likely ' + assets + ' is missing.'));
             callback();
         });
