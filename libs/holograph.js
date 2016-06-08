@@ -38,7 +38,7 @@ function extractPalette(file, config) {
     try {
         var template = fs.readFileSync(config.documentation_assets + '/_swatches.html', 'utf8');
     } catch (err) {
-        showError(err.message);
+        return;
     }
 
     // fetch palettes

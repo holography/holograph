@@ -54,7 +54,7 @@ Renderer.code = function (code, lang) {
 
     if (lang === 'html_example') {
         content = '<div class="codeExample">' +
-            '<div class="exampleOutput">' + code + '</div>' +
+            '<div class="exampleOutput clearfix">' + code + '</div>' +
             '<div class="codeBlock">' + renderCode(code, 'html') + '</div>' +
             '</div>';
     } else {
