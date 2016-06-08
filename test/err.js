@@ -21,7 +21,9 @@ describe("Holograph", function() {
             }),
             'assets': mock.directory({
                 items: {
-                    'style.css': "h1 { color: blue; }"
+                    'style.css': "h1 { color: blue; }",
+                    '_header.html': "<h1>header</h1>",
+                    '_footer.html': "<h2>footer</h2>"
                 }
             })
         });
@@ -66,6 +68,16 @@ describe("Holograph", function() {
                 fs.lstat('./hologram/style.css', function(err, stats) {
                     expect(err).to.be.null;
                     expect(stats.isFile()).to.be.true;
+                    done();
+                });
+            });
+        });
+
+        it("does not copy partials from documentation_assets into the destination", function(done) {
+            init({ destination: "./hologram", source: "./src", documentation_assets: "./assets"}, function(err) {
+                expect(err).to.be.null;
+                fs.lstat('./hologram/_header.html', function(err, stats) {
+                    expect(err.code).to.be.string('ENOENT');
                     done();
                 });
             });
