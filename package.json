@@ -1,12 +1,13 @@
 {
   "dependencies": {
     "colors": "^1.1.2",
+    "dive": "^0.5.0",
+    "extend": "^3.0.0",
     "highlight.js": "^9.4.0",
     "js-yaml": "^3.6.1",
     "meta-marked": "^0.4.1",
     "mustache": "^2.2.1",
     "ncp": "^2.0.0",
-    "dive": "^0.5.0",
     "rimraf": "^2.5.2"
   },
   "main": "./libs/holograph.js",
@@ -22,6 +23,6 @@
     "mock-fs": "^3.9.0"
   },
   "scripts": {
-      "test": "./node_modules/.bin/mocha"
+    "test": "./node_modules/.bin/mocha"
   }
 }

@@ -14,6 +14,7 @@ Holograph will run from same directory where the config file resides: all paths 
 
 ## Optional settings
 * **`index`**: The name of the category to set as the index.html of your style guide. String.
+* **`index_title`**: A custom name for the index page, defaults to "Home".
 * **`custom_extensions`**: List of file extensions to include for files in your source directory. Accepts either a single value or an array. Defaults to `.css`, `.scss`, `.less`, `.sass`, `.styl`, `.js`, `.md`, and `.markdown`.
 
 ## Not yet implemented

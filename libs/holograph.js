@@ -7,6 +7,7 @@ var yaml = require('js-yaml');
 var colors = require('colors');
 var marked = require('./markdown_renderer');
 var init = require('./holograph_init');
+var extend = require('extend');
 
 function showError(message) {
     if (message) {
@@ -37,7 +38,7 @@ function extractPalette(file, config) {
     try {
         var template = fs.readFileSync(config.documentation_assets + '/_swatches.html', 'utf8');
     } catch (err) {
-        showError(err.message);
+        return;
     }
 
     // fetch palettes
@@ -92,10 +93,10 @@ function prepareCategories(results, config) {
     return pages;
 }
 
-function preparePageLinks(current, pages) {
+function preparePageLinks(current, pages, index_title) {
     var links = [{
         link: 'index.html',
-        title: 'Home',
+        title: index_title,
         selected: current === 'index' ? 'selected' : ''
     }];
     var category;
@@ -149,7 +150,7 @@ function processFiles(results, config, cb) {
                     {
                         title: category,
                         config: config,
-                        categories: preparePageLinks(category, pages),
+                        categories: preparePageLinks(category, pages, config.index_title),
                         blocks: content.blocks
                     }
                 )
@@ -163,7 +164,7 @@ function processFiles(results, config, cb) {
                         {
                             title: 'index',
                             config: config,
-                            categories: preparePageLinks('index', pages),
+                            categories: preparePageLinks('index', pages, config.index_title),
                             blocks: content.blocks
                         }
                     )
@@ -187,6 +188,10 @@ function holograph(config, callback) {
 }
 
 function run() {
+    var config = {
+        index_title: 'Home'
+    };
+
     fs.readFile('holograph_config.yml', 'utf8',
         function(err, data) {
             if (err) {
@@ -195,7 +200,7 @@ function run() {
                 }
             }
 
-            holograph(yaml.safeLoad(data), function(err, result) {
+            holograph(extend(config, yaml.safeLoad(data)), function(err, result) {
                 showError(err);
                 console.log('Build successful \\o\/'.green);
             });
