@@ -51,7 +51,7 @@
 }
 
 .hgt-pagehead-nav a,
-.hgt-content .styleguide a,
+.hgt-content .styleguide:not(table) a,
 .hgt-footer a {
   color: #4183C4;
   text-decoration: none;
