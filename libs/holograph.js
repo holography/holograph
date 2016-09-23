@@ -17,24 +17,16 @@ function showError(message) {
     }
 }
 
-function extractComment(file) {
-    var doc = /\/\*doc\n([\s\S]*?)\*\//m;
-    var comment;
+function readFile(file) {
     try {
-        comment = fs.readFileSync(file, 'utf8').match(doc);
+        var comment = fs.readFileSync(file, 'utf8');
     } catch(err) {
         showError(err.message);
     }
     return comment;
 }
 
-function extractPalette(file, config) {
-    try {
-        var source = fs.readFileSync(file, 'utf8');
-    } catch (err) {
-        showError(err.message);
-    }
-
+function extractPalette(source, config) {
     try {
         var template = fs.readFileSync(config.documentation_assets + '/_swatches.html', 'utf8');
     } catch (err) {
@@ -75,21 +67,21 @@ function extractPalette(file, config) {
 }
 
 function prepareCategories(results, config) {
+    var doc = /\/\*doc\w*\n([\s\S]*?)\*\//mg;
     var pages = {};
 
     results.forEach(function(file) {
-        var text = extractComment(file);
-        if (text) {
-            var content = marked(text[1]);
-
+        var text = readFile(file);
+        var matches = [];
+        while (matches = doc.exec(text)) {
+            var content = marked(matches[1]);
             if (!(pages.hasOwnProperty(content.meta.category))) {
                 pages[content.meta.category] = [];
             }
-            content.html += extractPalette(file, config);
+            content.html += extractPalette(text, config);
             pages[content.meta.category].push(content);
         }
     });
-
     return pages;
 }
 
@@ -210,5 +202,6 @@ function run() {
 
 module.exports = {
     holograph: holograph,
-    run: run
+    run: run,
+    prepareCategories: prepareCategories
 };
