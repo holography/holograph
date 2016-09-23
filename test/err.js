@@ -5,28 +5,32 @@ var init = require('../libs/holograph_init');
 
 describe('Holograph', function() {
     describe('Setup Build Directory', function() {
-        mock({
-            'noaccess': mock.directory({
-                mode: '0700',
-                uid: 1,
-                gid: 1,
-                items: {
-                    'index.html': 'Hello, world!'
-                }
-            }),
-            'src': mock.directory({
-                items: {
-                    'main.scss': 'h1 { color: red; }'
-                }
-            }),
-            'assets': mock.directory({
-                items: {
-                    'style.css': 'h1 { color: blue; }',
-                    '_header.html': '<h1>header</h1>',
-                    '_footer.html': '<h2>footer</h2>'
-                }
-            })
+        beforeEach(function() {
+            mock({
+                'noaccess': mock.directory({
+                    mode: '0700',
+                    uid: 1,
+                    gid: 1,
+                    items: {
+                        'index.html': 'Hello, world!'
+                    }
+                }),
+                'src': mock.directory({
+                    items: {
+                        'main.scss': 'h1 { color: red; }'
+                    }
+                }),
+                'assets': mock.directory({
+                    items: {
+                        'style.css': 'h1 { color: blue; }',
+                        '_header.html': '<h1>header</h1>',
+                        '_footer.html': '<h2>footer</h2>'
+                    }
+                })
+            });
         });
+
+        afterEach(mock.restore);
 
         it('errs when the build destination cannot be removed', function(done) {
             init({ destination: './noaccess' }, function(err) {
