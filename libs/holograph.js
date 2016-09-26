@@ -96,7 +96,7 @@ function preparePageLinks(current, pages, index_title) {
     for (category in pages) {
         if (pages.hasOwnProperty(category)) {
             links.push({
-                link: category + '.html',
+                link: category.replace(/\s+/g, '').toLowerCase() + '.html',
                 title: category,
                 selected: category === current ? 'selected' : ''
             });
