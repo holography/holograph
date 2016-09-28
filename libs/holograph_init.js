@@ -76,16 +76,24 @@ module.exports = function(config, callback) {
                 return callback(new Error(err.message));
             }
 
-            filterFiles(config.source, function (err, file) {
-                if (err) {
-                    return callback(new Error(err.message));
-                }
+            if (Array.isArray(config.source) === false) {
+                config.source = [ config.source ];
+            }
 
-                if (allowedExtension(config, file)) {
-                    results.push(file);
-                }
-            }, function() {
-                return callback(null, results);
+            config.source.forEach(function(source, i) {
+                filterFiles(source, function (err, file) {
+                    if (err) {
+                        return callback(new Error(err.message));
+                    }
+
+                    if (allowedExtension(config, file)) {
+                        results.push(file);
+                    }
+                }, function() {
+                    if (i === config.source.length-1) {
+                        return callback(null, results);
+                    }
+                });
             });
         });
     });
