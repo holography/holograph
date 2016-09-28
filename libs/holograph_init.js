@@ -48,7 +48,7 @@ function copyDependencies(dir, deps, cb) {
         var source = deps.shift();
         ncp(source, dir + '/' + path.basename(source), function(err) {
             if (err) {
-                return showError(err.message);
+                return cb(err);
             }
             return copyDependencies(dir, deps, cb);
         });
