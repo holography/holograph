@@ -3,28 +3,9 @@
 
 var fs = require('fs');
 var mustache = require('mustache');
-var yaml = require('js-yaml');
 var colors = require('colors');
 var marked = require('./markdown_renderer');
 var init = require('./holograph_init');
-var extend = require('extend');
-
-function showError(message) {
-    if (message) {
-        console.log(message);
-        console.log('Build failed (╯°□°）╯︵ ┻━┻)'.red);
-        process.exit(1);
-    }
-}
-
-function readFile(file) {
-    try {
-        var comment = fs.readFileSync(file, 'utf8');
-    } catch(err) {
-        showError(err.message);
-    }
-    return comment;
-}
 
 function extractPalette(source, config) {
     try {
@@ -71,7 +52,7 @@ function prepareCategories(results, config) {
     var pages = {};
 
     results.forEach(function(file) {
-        var text = readFile(file);
+        var text = fs.readFileSync(file);
         var matches = [];
         while (matches = doc.exec(text)) {
             var content = marked(matches[1]);
@@ -82,6 +63,7 @@ function prepareCategories(results, config) {
             pages[content.meta.category].push(content);
         }
     });
+
     return pages;
 }
 
@@ -174,34 +156,13 @@ function maybeThrowError(err) {
 
 function holograph(config, callback) {
     init(config, function(err, results) {
-        if(err) { callback(err); }
+        if(err) { return callback(err); }
         processFiles(results, config, callback);
     });
 }
 
-function run() {
-    var config = {
-        index_title: 'Home'
-    };
-
-    fs.readFile('holograph_config.yml', 'utf8',
-        function(err, data) {
-            if (err) {
-                if (err.code === 'ENOENT') {
-                    showError('Could not find holograph_config.yml in the current directory.');
-                }
-            }
-
-            holograph(extend(config, yaml.safeLoad(data)), function(err, result) {
-                showError(err);
-                console.log('Build successful \\o\/'.green);
-            });
-        }
-    );
-}
 
 module.exports = {
     holograph: holograph,
-    run: run,
     prepareCategories: prepareCategories
 };
