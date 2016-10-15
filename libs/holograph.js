@@ -107,7 +107,7 @@ function prepareCategories(results, config) {
             if (!(pages.hasOwnProperty(content.meta.category))) {
                 pages[content.meta.category] = [];
             }
-            //content.html += extractPalette(file, config);
+            content.html += extractPalette(file, config);
             pages[content.meta.category].push(content);
         }
     });
