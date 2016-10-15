@@ -1,5 +1,33 @@
 #!/usr/bin/env node
+var h = require('../');
+var fs = require('fs');
+var extend = require('extend');
+var yaml = require('js-yaml');
 
-var holograph = require('../');
+var config = {
+    index_title: 'Home'
+};
 
-holograph.run();
+function showError(message) {
+    if (message) {
+        console.log(message);
+        console.log('Build failed (╯°□°）╯︵ ┻━┻)'.red);
+        process.exit(1);
+    }
+}
+
+fs.readFile('holograph_config.yml', 'utf8',
+    function(err, data) {
+        if (err) {
+            if (err.code === 'ENOENT') {
+                showError('Could not find holograph_config.yml in the current directory.');
+            }
+        }
+
+        h.holograph(extend(config, yaml.safeLoad(data)), function(err, result) {
+            showError(err);
+            console.log('Build successful \\o\/'.green);
+        });
+    }
+);
+

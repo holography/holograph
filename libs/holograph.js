@@ -2,45 +2,16 @@
 /*jslint node: true, stupid: true */
 
 var fs = require('fs');
-var path = require('path');
-var filterFiles = require('dive');
-var rmdir = require('rimraf');
-var ncp = require('ncp').ncp;
 var mustache = require('mustache');
-var marked = require('./markdown_renderer');
-var yaml = require('js-yaml');
 var colors = require('colors');
+var marked = require('./markdown_renderer');
+var init = require('./holograph_init');
 
-function showError(message) {
-    if (message) {
-        console.log(message);
-        console.log('Build failed (╯°□°）╯︵ ┻━┻)'.red);
-        process.exit(1);
-    }
-}
-
-function extractComment(file) {
-    var doc = /\/\*doc\n([\s\S]*?)\*\//m;
-    var comment;
-    try {
-        comment = fs.readFileSync(file, 'utf8').match(doc);
-    } catch(err) {
-        showError(err.message);
-    }
-    return comment;
-}
-
-function extractPalette(file, config) {
-    try {
-        var source = fs.readFileSync(file, 'utf8');
-    } catch (err) {
-        showError(err.message);
-    }
-
+function extractPalette(source, config) {
     try {
         var template = fs.readFileSync(config.documentation_assets + '/_swatches.html', 'utf8');
     } catch (err) {
-        showError(err.message);
+        return;
     }
 
     // fetch palettes
@@ -76,38 +47,19 @@ function extractPalette(file, config) {
     return content;
 }
 
-function setupBuildDir(dir, assets, callback) {
-    rmdir(dir, function(err) {
-        if (err) callback(err);
-        fs.mkdir(dir);
-        ncp(assets, dir, function(err) {
-            if (err && err.code === 'ENOENT') callback(new Error('Couldn\'t find a directory, most likely ' + assets + ' is missing.'));
-            callback();
-        });
-    });
-}
-
-function copyDependencies(dir, deps, cb) {
-    var source = deps.shift();
-    ncp(source, dir+'/'+path.basename(source), function(err) {
-        if (err) { showError(err.message) }
-        if (deps.length) { copyDependencies(dir, deps, cb); }
-        cb();
-    });
-}
-
 function prepareCategories(results, config) {
+    var doc = /\/\*doc\w*\n([\s\S]*?)\*\//mg;
     var pages = {};
 
     results.forEach(function(file) {
-        var text = extractComment(file);
-        if (text) {
-            var content = marked(text[1]);
-
+        var text = fs.readFileSync(file);
+        var matches = [];
+        while (matches = doc.exec(text)) {
+            var content = marked(matches[1]);
             if (!(pages.hasOwnProperty(content.meta.category))) {
                 pages[content.meta.category] = [];
             }
-            content.html += extractPalette(file, config);
+            content.html += extractPalette(text, config);
             pages[content.meta.category].push(content);
         }
     });
@@ -115,10 +67,10 @@ function prepareCategories(results, config) {
     return pages;
 }
 
-function preparePageLinks(current, pages) {
+function preparePageLinks(current, pages, index_title) {
     var links = [{
         link: 'index.html',
-        title: 'Home',
+        title: index_title,
         selected: current === 'index' ? 'selected' : ''
     }];
     var category;
@@ -126,7 +78,7 @@ function preparePageLinks(current, pages) {
     for (category in pages) {
         if (pages.hasOwnProperty(category)) {
             links.push({
-                link: category + '.html',
+                link: category.replace(/\s+/g, '').toLowerCase() + '.html',
                 title: category,
                 selected: category === current ? 'selected' : ''
             });
@@ -134,13 +86,6 @@ function preparePageLinks(current, pages) {
     }
 
     return links;
-}
-
-function allowedExtension(config, file) {
-    var defaultExtensions = ['.css', '.scss', '.less', '.sass', '.styl', '.js', '.md', '.markdown'];
-    var extensions =  config.custom_extensions || defaultExtensions;
-
-    return extensions.indexOf(path.extname(file)) !== -1;
 }
 
 function generatePage(config, page) {
@@ -179,7 +124,7 @@ function processFiles(results, config, cb) {
                     {
                         title: category,
                         config: config,
-                        categories: preparePageLinks(category, pages),
+                        categories: preparePageLinks(category, pages, config.index_title),
                         blocks: content.blocks
                     }
                 )
@@ -193,7 +138,7 @@ function processFiles(results, config, cb) {
                         {
                             title: 'index',
                             config: config,
-                            categories: preparePageLinks('index', pages),
+                            categories: preparePageLinks('index', pages, config.index_title),
                             blocks: content.blocks
                         }
                     )
@@ -210,41 +155,14 @@ function maybeThrowError(err) {
 }
 
 function holograph(config, callback) {
-    var results = [];
-    setupBuildDir(config.destination, config.documentation_assets, function(err) {
-        if (err) callback(new Error(err.message));
-        copyDependencies(config.destination, config.dependencies, function(err) {
-            if (err) callback(new Error(err.message));
-            filterFiles(config.source, function (err, file) {
-                if (err) callback(new Error(err.message));
-                if (allowedExtension(config, file)) {
-                    results.push(file);
-                }
-            }, function() {
-                processFiles(results, config, callback);
-            });
-        });
+    init(config, function(err, results) {
+        if(err) { return callback(err); }
+        processFiles(results, config, callback);
     });
 }
 
-function run() {
-    fs.readFile('holograph_config.yml', 'utf8',
-        function(err, data) {
-            if (err) {
-                if (err.code === 'ENOENT') {
-                    showError('Could not find holograph_config.yml in the current directory.');
-                }
-            }
-
-            holograph(yaml.safeLoad(data), function(err, result) {
-                showError(err);
-                console.log('Build successful \\o\/'.green);
-            });
-        }
-    );
-}
 
 module.exports = {
     holograph: holograph,
-    run: run
+    prepareCategories: prepareCategories
 };

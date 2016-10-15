@@ -2,5 +2,5 @@ node_modules
 .DS_Store
 scss
 css
-./holograph
+/holograph
 .sass-cache
