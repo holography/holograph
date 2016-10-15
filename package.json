@@ -3,12 +3,12 @@
     "colors": "^1.1.2",
     "dive": "^0.5.0",
     "extend": "^3.0.0",
-    "highlight.js": "^9.4.0",
+    "highlight.js": "^9.7.0",
     "js-yaml": "^3.6.1",
-    "meta-marked": "^0.4.1",
+    "meta-marked": "^0.4.2",
     "mustache": "^2.2.1",
     "ncp": "^2.0.0",
-    "rimraf": "^2.5.2"
+    "rimraf": "^2.5.4"
   },
   "main": "./libs/holograph.js",
   "bin": "./bin/holograph",
@@ -19,7 +19,7 @@
   "name": "holograph",
   "devDependencies": {
     "chai": "^3.5.0",
-    "mocha": "^2.5.3",
+    "mocha": "^3.1.2",
     "mock-fs": "^3.9.0"
   },
   "scripts": {
