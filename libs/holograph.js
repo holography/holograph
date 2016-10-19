@@ -78,7 +78,7 @@ function preparePageLinks(current, pages, index_title) {
     for (category in pages) {
         if (pages.hasOwnProperty(category)) {
             links.push({
-                link: category.replace(/\s+/g, '').toLowerCase() + '.html',
+                link: categoryLink(category),
                 title: category,
                 selected: category === current ? 'selected' : ''
             });
@@ -118,7 +118,7 @@ function processFiles(results, config, cb) {
         if (pages.hasOwnProperty(category)) {
             content = generatePage(config, pages[category])
             fs.writeFile(
-                config.destination + '/' + category + '.html',
+                config.destination + '/' + categoryLink(category),
                 mustache.render(
                     content.content,
                     {
@@ -148,6 +148,10 @@ function processFiles(results, config, cb) {
     }
 
     if (cb) cb();
+}
+
+function categoryLink(category) {
+    return category.replace(/[^\w\s]/gi, '').replace(/\s+/g, '-').toLowerCase() + '.html'
 }
 
 function maybeThrowError(err) {
