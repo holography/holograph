@@ -47,24 +47,70 @@ function extractPalette(source, config) {
     return content;
 }
 
-function prepareCategories(results, config) {
-    var doc = /\/\*doc\w*\n([\s\S]*?)\*\//mg;
-    var pages = {};
-
-    results.forEach(function(file) {
-        var text = fs.readFileSync(file);
-        var matches = [];
-        while (matches = doc.exec(text)) {
-            var content = marked(matches[1]);
-            if (!(pages.hasOwnProperty(content.meta.category))) {
-                pages[content.meta.category] = [];
-            }
-            content.html += extractPalette(text, config);
-            pages[content.meta.category].push(content);
-        }
+function prepareCategories(files, config) {
+    var blocks = [];
+    files.forEach(function(file) {
+        blocks = blocks.concat(
+            parseFile(file, config)
+        );
     });
 
-    return pages;
+    blocks.sort(function(a,b) {
+        return getOrder(a) - getOrder(b);
+    })
+
+    // create cats
+    cats = buildCats(cats);
+
+    // nest subcats under cats
+    cats = nestCats(cats);
+
+
+
+    return allSections;
+}
+
+function getOrder(block) {
+    if (block.meta.order === undefined) {
+        return Infinity;
+    }
+    return block.meta.order;
+}
+
+function buildCats(blocks) {
+    var catList = {};
+    blocks.forEach(function(block) {
+        if (!(catList.hasOwnProperty(block.meta.category))) {
+            catList[block.meta.category] = [];
+        }
+        catList[block.meta.category].push(block);
+    })
+    return catList;
+}
+
+function nestCats(catList) {
+    catList.forEach(function(cat) {
+        var subcatList = {};
+        forEach.cat(function(subcat) {
+            if (!(subcat.hasOwnProperty(block.meta.parent))) {
+                catList[block.meta.parent] = [];
+            }
+            subcatList[block.meta.category].push(subcat);
+        });
+    });
+}
+
+function parseFile(file, config) {
+    var doc = /\/\*doc\w*\n([\s\S]*?)\*\//mg;
+    var blocks = [];
+    var text = fs.readFileSync(file);
+    var matches;
+    while (matches = doc.exec(text)) {
+        var content = marked(matches[1]);
+        content.html += extractPalette(text, config);
+        blocks.push(content);
+    }
+    return blocks;
 }
 
 function preparePageLinks(current, pages, index_title) {
@@ -90,15 +136,19 @@ function preparePageLinks(current, pages, index_title) {
 
 function generatePage(config, page) {
     var blocks = [];
+    var heading;
     var rawContent = fs.readFileSync(config.documentation_assets + '/_header.html', 'utf8');
 
     page.forEach(function (block) {
-        rawContent += '<h1 id="'+block.meta.name+'" class="styleguide">'+block.meta.title+'</h1>';
+        heading = block.meta.parent ? 'h3' : 'h2';
+
+        rawContent += '<' + heading + ' id="'+block.meta.name+'" class="styleguide">'+block.meta.title+'</' + heading + '>';
         rawContent += block.html;
 
         blocks.push({
             name: block.meta.name,
-            title: block.meta.title
+            title: block.meta.title,
+            class: block.meta.parent ? 'child' : ''
         });
     });
 
