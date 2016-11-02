@@ -6,7 +6,6 @@
     <title>{{ title }}{{ #title }} &ndash; {{ /title }}{{ config.global_title }}</title>
 
     <!-- Styleguide CSS -->
-    <link rel="stylesheet" href="styles/hgt.css">
     <link rel="stylesheet" href="styles/github-gist.css">
     <link rel="stylesheet" href="styles/holograph.css">
 
@@ -28,9 +27,9 @@
       </div>
     </div>
 
-    <div class="hgt-styleguide hgt-container hgt-column--mobile">
+    <div class="hgt-styleguide hgt-container">
       <div class="hgt-columns">
-          <div class="hgt-column one-fourth hgt-column--mobile">
+          <div class="hgt-column one-fourth">
             <nav class="hgt-menu">
               {{#blocks}}
               <a href="#{{name}}" class="hgt-menu-item">{{title}}</a>
@@ -38,5 +37,5 @@
             </nav>
           </div>
 
-          <div class="hgt-column {{#blocks.length}}three-fourths hgt-column--mobile{{/blocks.length}}">
+          <div class="hgt-column {{#blocks.length}}three-fourths{{/blocks.length}}">
           <div class="hgt-content">
