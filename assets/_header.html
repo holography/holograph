@@ -30,6 +30,7 @@
 
     <div class="hgt-styleguide hgt-container hgt-column--mobile">
       <div class="hgt-columns">
+          {{#blocks.length}}
           <div class="hgt-column one-fourth hgt-column--mobile">
             <nav class="hgt-menu">
               {{#blocks}}
@@ -37,6 +38,7 @@
               {{/blocks}}
             </nav>
           </div>
+          {{/blocks.length}}
 
           <div class="hgt-column {{#blocks.length}}three-fourths hgt-column--mobile{{/blocks.length}}">
           <div class="hgt-content">
