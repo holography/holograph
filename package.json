@@ -24,6 +24,6 @@
     "typings": "^2.0.0"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha test/*"
+    "test": "./node_modules/.bin/mocha --recursive"
   }
 }
