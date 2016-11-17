@@ -4,24 +4,23 @@ const yaml = require('js-yaml');
 const fs = require('fs');
 
 function configLoader() {
-  this.configType = this.getConfigExtension();
 }
+
 
 configLoader.prototype.load = function () {
 
-  if (this.configType === 'yml') {
-    return this._loadYamlConfig();
+  if (this._hasJSConfig()) {
+    return this._loadJsConfig();
   }
 
-  if (this.configType === 'js') {
-    return this._loadJsConfig();
+  if (this._hasYAMLConfig()) {
+    return this._loadYamlConfig();
   }
 
 };
 
 configLoader.prototype._loadJsConfig = function () {
-  const jsConfig = require('./holograph_config');
-  return jsConfig;
+  return require('./holograph_config');
 };
 
 configLoader.prototype._loadYamlConfig = function () {
@@ -52,17 +51,5 @@ configLoader.prototype._hasJSConfig = function () {
   return true;
 
 }
-
-configLoader.prototype.getConfigExtension = function () {
-
-  if (this._hasJSConfig()) {
-    return 'js';
-  }
-
-  if (this._hasYAMLConfig()) {
-    return 'yml';
-  }
-
-};
 
 module.exports = configLoader;

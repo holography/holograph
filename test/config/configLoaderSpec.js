@@ -17,54 +17,6 @@ const configLoader = proxyquire('../../libs/config/configLoader', {
 
 describe('configLoader', function () {
 
-  describe('locator', function () {
-
-    let loader;
-
-    afterEach(function () {
-      mock.restore();
-      loader = {};
-    });
-
-    it('can locate YAML config files', function () {
-
-      mock({
-        'holograph_config.yml': YAMLConfigFixture
-      });
-
-      loader = new configLoader();
-
-      expect(loader.getConfigExtension()).to.equal('yml');
-
-    })
-
-    it('can locate JS config files', function () {
-
-      mock({
-        'holograph_config.js': JSConfigFixture
-      });
-
-      loader = new configLoader();
-
-      expect(loader.getConfigExtension()).to.equal('js');
-
-    });
-
-    it('prefers JS files over YAML files', function () {
-
-      mock({
-        'holograph_config.yml': YAMLConfigFixture,
-        'holograph_config.js': JSConfigFixture
-      });
-
-      loader = new configLoader();
-
-      expect(loader.getConfigExtension()).to.equal('js');
-
-    });
-
-  });
-
   describe('loading', function () {
 
     let loader;
@@ -96,6 +48,20 @@ describe('configLoader', function () {
       });
 
       // const stubbedJSConfig = proxyquire('./holograph_config', {foo: 'bar'}).noCallThru();
+
+      loader = new configLoader();
+      config = loader.load();
+
+      expect(config.global_title).to.equal('Holograph stylesheet - JavaScript');
+
+    });
+
+    it('prefers JS config over YAML config', function () {
+
+      mock({
+        'holograph_config.yml': YAMLConfigFixture,
+        'holograph_config.js': JSConfigFixture
+      });
 
       loader = new configLoader();
       config = loader.load();
