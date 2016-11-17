@@ -47,8 +47,6 @@ describe('configLoader', function () {
         'holograph_config.js': fs.readFileSync('test/fixtures/holograph_config.js').toString()
       });
 
-      // const stubbedJSConfig = proxyquire('./holograph_config', {foo: 'bar'}).noCallThru();
-
       loader = new configLoader();
       config = loader.load();
 
@@ -70,7 +68,24 @@ describe('configLoader', function () {
 
     });
 
-  });
+    it('throws an error if no config was found', function () {
 
+      mock({
+        'dummy.txt': 'I am a dummy file.'
+      });
+
+      loader = new configLoader();
+
+      // This has to be in a callable for some reason, as Chai fails miserably then you just pass loader.load to
+      // expect()
+      const loaderFunc = function () {
+        loader.load();
+      }
+
+      expect(loaderFunc).to.throw(Error, 'No holograph configuration file found.');
+
+    });
+
+  });
 
 });

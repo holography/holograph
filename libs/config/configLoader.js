@@ -6,7 +6,6 @@ const fs = require('fs');
 function configLoader() {
 }
 
-
 configLoader.prototype.load = function () {
 
   if (this._hasJSConfig()) {
@@ -16,6 +15,8 @@ configLoader.prototype.load = function () {
   if (this._hasYAMLConfig()) {
     return this._loadYamlConfig();
   }
+
+  throw new Error('No holograph configuration file found.');
 
 };
 
