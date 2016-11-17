@@ -1,18 +1,23 @@
 'use strict';
 
 // Module imports.
-const configLoader = require('../../libs/config/configLoader');
 const expect = require('chai').expect;
 const mock = require('mock-fs');
 const fs = require('fs');
+const proxyquire = require('proxyquire').noCallThru();
 
 // Fixture imports.
 const YAMLConfigFixture = fs.readFileSync('test/fixtures/holograph_config.yml');
 const JSConfigFixture = require('../fixtures/holograph_config');
 
+// SUT.
+const configLoader = proxyquire('../../libs/config/configLoader', {
+  './holograph_config': require('../fixtures/holograph_config.js')
+});
+
 describe('configLoader', function () {
 
-  describe('location', function () {
+  describe('locator', function () {
 
     let loader;
 
@@ -55,43 +60,51 @@ describe('configLoader', function () {
       loader = new configLoader();
 
       expect(loader.getConfigExtension()).to.equal('js');
+
     });
 
   });
 
-  // describe('loading', function () {
+  describe('loading', function () {
 
-  //   let loader;
+    let loader;
+    let config;
 
-  //   afterEach(function () {
-  //     mock.restore();
-  //     loader = {};
-  //   });
+    afterEach(function () {
+      mock.restore();
+      loader = {};
+      config = {};
+    });
 
-    // it('can load YAML config', function () {
+    it('can load YAML config', function () {
 
-    //   mock({
-    //     'holograph_config.yml': YAMLConfigFixture
-    //   });
+      mock({
+        'holograph_config.yml': YAMLConfigFixture
+      });
 
-    //   loader = new configLoader();
-    //   config = loader.load();
+      loader = new configLoader();
+      config = loader.load();
 
-    //   expect(config.global_title).to.equal('Holograph stylesheet - YAML');
+      expect(config.global_title).to.equal('Holograph stylesheet - YAML');
 
-    // });
+    });
 
-    // it('can load JS config', function () {
+    it('can load JS config', function () {
 
-    //   mock({
-    //     'holograph_config.js': JSConfigFixture
-    //   });
+      mock({
+        'holograph_config.js': fs.readFileSync('test/fixtures/holograph_config.js').toString()
+      });
 
-    //   expect(config.global_title).to.equal('Holograph stylesheet - JavaScript');
+      // const stubbedJSConfig = proxyquire('./holograph_config', {foo: 'bar'}).noCallThru();
 
-    // });
+      loader = new configLoader();
+      config = loader.load();
 
-  // });
+      expect(config.global_title).to.equal('Holograph stylesheet - JavaScript');
+
+    });
+
+  });
 
 
 });
