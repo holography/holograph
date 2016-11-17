@@ -12,7 +12,10 @@ const JSConfigFixture = require('../fixtures/holograph_config');
 
 // SUT.
 const configLoader = proxyquire('../../libs/config/configLoader', {
-  './holograph_config': require('../fixtures/holograph_config.js')
+  './holograph_config': require('../fixtures/holograph_config.js'),
+  './defaultConfig': {
+    'test_config': 'I am a serious expectation.'
+  }
 });
 
 describe('configLoader', function () {
@@ -83,6 +86,19 @@ describe('configLoader', function () {
       }
 
       expect(loaderFunc).to.throw(Error, 'No holograph configuration file found.');
+
+    });
+
+    it('merges loaded config with defaults', function () {
+
+      mock({
+        'holograph_config.js': JSConfigFixture
+      });
+
+      loader = new configLoader();
+      config = loader.load();
+
+      expect(config.test_config).to.equal('I am a serious expectation.');
 
     });
 

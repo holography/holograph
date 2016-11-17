@@ -2,6 +2,7 @@
 
 const yaml = require('js-yaml');
 const fs = require('fs');
+const extend = require('extend');
 
 /**
  * Load configuration from files.
@@ -9,6 +10,7 @@ const fs = require('fs');
  * @class
  */
 function configLoader() {
+  this.defaultConfig = require('./defaultConfig');
 }
 
 /**
@@ -21,17 +23,26 @@ function configLoader() {
 configLoader.prototype.load = function () {
 
   if (this.hasJSConfig()) {
-    return this.loadJsConfig();
+    return this.mergeDefaultConfig(this.loadJsConfig());
   }
 
   if (this.hasYAMLConfig()) {
-    return this.loadYamlConfig();
+    return this.mergeDefaultConfig(this.loadYamlConfig());
   }
 
   // If we've not been able to find a config file, then bomb out.
   throw new Error('No holograph configuration file found.');
 
 };
+
+/**
+ * Merge loaded configuration with defaults.
+ *
+ * @returns {object} Loaded configuration merged with default required Holograph config.
+ */
+configLoader.prototype.mergeDefaultConfig = function (loadedConfig) {
+  return extend(this.defaultConfig, loadedConfig);
+}
 
 /**
  * Load a JavaScript based configuration file.
