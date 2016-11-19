@@ -104,4 +104,64 @@ describe('configLoader', function () {
 
   });
 
+  describe('promise loading', function () {
+
+    let loader;
+    let config;
+
+    afterEach(function () {
+      mock.restore();
+      loader = {};
+      config = {};
+    });
+
+    it('can load YAML config with a promise', function (done) {
+
+      mock({
+        'holograph_config.yml': YAMLConfigFixture,
+      });
+
+      loader = new configLoader();
+      loader.loadPromise()
+        .then(function (config) {
+          expect(config.global_title).to.equal('Holograph stylesheet - YAML');
+          done();
+        })
+        .catch(done);
+
+    });
+
+    it('can load JS config with a promise', function (done) {
+
+      mock({
+        'holograph_config.js': JSConfigFixture,
+      });
+
+      loader = new configLoader();
+      loader.loadPromise()
+        .then(function (config) {
+          expect(config.global_title).to.equal('Holograph stylesheet - JavaScript');
+          done();
+        })
+        .catch(done);
+
+    });
+
+    it('rejects the promise if there\'s an error', function (done) {
+
+      mock({
+        'dummy.txt': 'I am a dummy file.'
+      });
+
+      loader = new configLoader();
+
+      loader.loadPromise()
+        .catch(function (err) {
+          done();
+        });
+
+    });
+
+  });
+
 });

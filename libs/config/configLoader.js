@@ -3,6 +3,7 @@
 const yaml = require('js-yaml');
 const fs = require('fs');
 const extend = require('extend');
+const Promise = require('bluebird');
 
 /**
  * Load configuration from files.
@@ -32,6 +33,30 @@ configLoader.prototype.load = function () {
 
   // If we've not been able to find a config file, then bomb out.
   throw new Error('No holograph configuration file found.');
+
+};
+
+/**
+ * Load configuration from either a JS or YAML file into a promise.
+ *
+ * @returns {Promise} A promise that resolves with either the loaded configuration, or rejects with any errors raised.
+ */
+configLoader.prototype.loadPromise = function () {
+
+  let config;
+
+  return new Promise(function(resolve, reject) {
+
+    try {
+      config = this.load();
+    }
+    catch(err) {
+      reject(err.toString());
+    }
+
+    resolve(config);
+
+  }.bind(this));
 
 };
 

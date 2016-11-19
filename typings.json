@@ -2,7 +2,9 @@
   "name": "holograph",
   "dependencies": {},
   "globalDependencies": {
+    "bluebird": "registry:dt/bluebird#3.0.0+20161007114152",
     "colors": "registry:dt/colors#0.6.0-1+20160914114039",
+    "exit": "registry:dt/exit#0.1.2+20160316155526",
     "extend": "registry:dt/extend#2.0.0+20160316155526",
     "js-yaml": "registry:dt/js-yaml#3.5.2+20160316171810",
     "mustache": "registry:dt/mustache#0.8.2+20160316155526",
@@ -14,6 +16,8 @@
     "chai": "registry:dt/chai#3.4.0+20160601211834",
     "mocha": "registry:dt/mocha#2.2.5+20161028141524",
     "mock-fs": "registry:dt/mock-fs#3.6.0+20160317120654",
-    "proxyquire": "registry:dt/proxyquire#1.3.0+20160316155526"
+    "proxyquire": "registry:dt/proxyquire#1.3.0+20160316155526",
+    "sinon": "registry:dt/sinon#1.16.0+20160924120326",
+    "sinon-chai": "registry:dt/sinon-chai#2.7.0+20160317120654"
   }
 }
