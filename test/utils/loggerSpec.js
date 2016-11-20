@@ -5,6 +5,7 @@ const chai = require('chai');
 const sinon = require("sinon");
 const sinonChai = require("sinon-chai");
 const eazy = require('eazy-logger');
+
 // SUT.
 const logger = require('../../libs/utils/logger');
 
