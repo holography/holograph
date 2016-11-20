@@ -1,17 +1,11 @@
 'use strict';
 
 // Module imports.
-const chai = require('chai');
-const sinon = require("sinon");
-const sinonChai = require("sinon-chai");
+const expect = require('chai').expect;
 const eazy = require('eazy-logger');
 
 // SUT.
 const logger = require('../../libs/utils/logger');
-
-// Chai setup.
-const expect = chai.expect;
-chai.use(sinonChai);
 
 describe('logger', function () {
 
