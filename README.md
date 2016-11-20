@@ -18,7 +18,13 @@ Using the `--save` or `--save-dev` flag will add the dependency to your project'
 
 ## Configuration
 
-Settings for your Holograph instance are found in `holograph_config.yml` and use YAML syntax. To begin, copy the template configuration file into your project root with:
+Settings for your Holograph instance are found in either `holograph_config.yml` or `holograph_config.js` depending on your preference. To begin, copy your chosen language's template configuration file into your project root:
+
+JS:
+
+    cp node_mdules/holograph/holograph_config.js .
+
+YAML:
 
     cp node_modules/holograph/holograph_config.yml .
 

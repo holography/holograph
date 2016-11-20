@@ -1,6 +1,6 @@
 # How to configure Holograph
 
-Settings for your Holograph instance are found in `holograph_config.yml` and use YAML syntax.
+Settings for your Holograph instance are found in either `holograph_config.js` or `holograph_config.yml`.
 
 Holograph will run from same directory where the config file resides: all paths should be relative to that location.
 
