@@ -1,33 +1,33 @@
 #!/usr/bin/env node
-var h = require('../');
-var fs = require('fs');
-var extend = require('extend');
-var yaml = require('js-yaml');
 
-var config = {
-    index_title: 'Home'
+const h = require('../');
+const configLoader = require('../libs/config/configLoader');
+const config = new configLoader();
+const logger = require('../libs/utils/logger');
+const exit = require('exit');
+
+/**
+ * Callback passed to Holograph.
+ *
+ * @param {Error} err Any errors that are thrown during Holograph build.
+ * @param {any} result Any result sent back from Holograph.
+ */
+function holographCallback (err, result) {
+
+    if (err) {
+        logger.logFailingError(err);
+        exit(1);
+    }
+
+    logger.logSuccessfulBuild();
+
 };
 
-function showError(message) {
-    if (message) {
-        console.log(message);
-        console.log('Build failed (╯°□°）╯︵ ┻━┻)'.red);
-        process.exit(1);
-    }
-}
-
-fs.readFile('holograph_config.yml', 'utf8',
-    function(err, data) {
-        if (err) {
-            if (err.code === 'ENOENT') {
-                showError('Could not find holograph_config.yml in the current directory.');
-            }
-        }
-
-        h.holograph(extend(config, yaml.safeLoad(data)), function(err, result) {
-            showError(err);
-            console.log('Build successful \\o\/'.green);
-        });
-    }
-);
-
+config.loadPromise()
+    .then(function (config) {
+        h.holograph(config, holographCallback)
+    })
+    .catch(function (err) {
+        logger.logFailingError(err);
+        exit(1);
+    });
