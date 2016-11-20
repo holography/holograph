@@ -51,7 +51,7 @@ configLoader.prototype.loadPromise = function () {
       config = this.load();
     }
     catch(err) {
-      reject(err.toString());
+      reject(err);
     }
 
     resolve(config);
