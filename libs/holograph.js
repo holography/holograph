@@ -67,30 +67,39 @@ function prepareCategories(results, config) {
     return pages;
 }
 
-function preparePageLinks(current, pages, index_title) {
+function preparePageLinks(current, pages, config) {
     var links = [{
         link: 'index.html',
-        title: index_title,
+        title: config.index_title,
         selected: current === 'index' ? 'selected' : ''
     }];
     var category;
 
     for (category in pages) {
         if (pages.hasOwnProperty(category)) {
-            links.push({
-                link: categoryLink(category),
-                title: category,
-                selected: category === current ? 'selected' : ''
-            });
+            if (category != config.index) {
+                links.push({
+                    link: categoryLink(category),
+                    title: category,
+                    selected: category === current ? 'selected' : ''
+                });
+            }
         }
     }
 
     return links;
 }
 
+function headerFooter(config, content) {
+    var rawContent = fs.readFileSync(config.documentation_assets + '/_header.html', 'utf8');
+    rawContent += content;
+    rawContent += fs.readFileSync(config.documentation_assets +'/_footer.html', 'utf8');
+    return rawContent;
+}
+
 function generatePage(config, page) {
     var blocks = [];
-    var rawContent = fs.readFileSync(config.documentation_assets + '/_header.html', 'utf8');
+    var rawContent = "";
 
     page.forEach(function (block) {
         rawContent += '<h1 id="'+block.meta.name+'" class="styleguide">'+block.meta.title+'</h1>';
@@ -102,10 +111,9 @@ function generatePage(config, page) {
         });
     });
 
-    rawContent += fs.readFileSync(config.documentation_assets +'/_footer.html', 'utf8');
 
     return {
-        content: rawContent,
+        content: headerFooter(config, rawContent),
         blocks: blocks
     }
 }
@@ -115,36 +123,42 @@ function processFiles(results, config, cb) {
     var category, content;
 
     for (category in pages) {
+        var page = category === config.index ? 'index' : category;
         if (pages.hasOwnProperty(category)) {
             content = generatePage(config, pages[category])
             fs.writeFile(
-                config.destination + '/' + categoryLink(category),
+                config.destination + '/' + categoryLink(page),
                 mustache.render(
                     content.content,
                     {
-                        title: category,
+                        title: page,
                         config: config,
-                        categories: preparePageLinks(category, pages, config.index_title),
+                        categories: preparePageLinks(page, pages, config),
                         blocks: content.blocks
                     }
                 )
             );
-
-            if (category === config.index) {
-                fs.writeFile(
-                    config.destination + '/index.html',
-                    mustache.render(
-                        content.content,
-                        {
-                            title: 'index',
-                            config: config,
-                            categories: preparePageLinks('index', pages, config.index_title),
-                            blocks: content.blocks
-                        }
-                    )
-                )
-            }
         }
+    }
+
+    if (!config.index) {
+        fs.stat(config.source + '/index.md', function(err, stats) {
+            if (!err) {
+                fs.readFile(config.source + '/index.md', 'utf8', function(err, content) {
+                    fs.writeFile(
+                        config.destination + '/index.html',
+                        mustache.render(
+                            headerFooter(config, marked(content).html),
+                            {
+                                title: 'index',
+                                config: config,
+                                categories: preparePageLinks('index', pages, config)
+                            }
+                        )
+                    )
+                });
+            }
+        });
     }
 
     if (cb) cb();
