@@ -1,7 +1,10 @@
 {
   "dependencies": {
+    "bluebird": "^3.4.6",
     "colors": "^1.1.2",
     "dive": "^0.5.0",
+    "eazy-logger": "^3.0.2",
+    "exit": "^0.1.2",
     "extend": "^3.0.0",
     "highlight.js": "^9.7.0",
     "js-yaml": "^3.6.1",
@@ -20,9 +23,11 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^3.1.2",
-    "mock-fs": "^3.9.0"
+    "mock-fs": "^3.9.0",
+    "proxyquire": "^1.7.10",
+    "typings": "^2.0.0"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha"
+    "test": "./node_modules/.bin/mocha --recursive"
   }
 }
