@@ -22,7 +22,7 @@ Settings for your Holograph instance are found in either `holograph_config.yml` 
 
 JS:
 
-    cp node_mdules/holograph/holograph_config.js .
+    cp node_modules/holograph/holograph_config.js .
 
 YAML:
 
