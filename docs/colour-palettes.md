@@ -12,7 +12,17 @@ This feature is unique to Holograph and is not found in Ruby Hologram.
 
 Stylesheets that contain palettes can optionally contain the markdown and examples. As with other Holograph components, they can named and categorised. The palette content will appear below any other content in your documentation.
 
-Palettes take your colour variable declarations and convert them to swatches in your style guide. To mark colour variables to include in Holograph, use the following comment syntax:
+Palettes take your colour variable declarations and convert them to swatches in your style guide. Note: you will still need to include a Holograph comment block for this file.
+
+To mark colour variables to include in Holograph, use the following comment syntax:
+
+    /*doc
+    ---
+    title: Colours
+    name: colours
+    category: settings
+    ---
+    */
 
     $scss-variable: <value>;    // hg-palette: Palette name
     $sass-variable: <value>     // hg-palette: Palette name
